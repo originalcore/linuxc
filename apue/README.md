@@ -2,7 +2,7 @@
 
 ## I/O
 
-### 不用缓存的I/O
+### 不用缓存的I/O(nobuffer_io.c)
 
 函数open,read,write,lseek,close提供了不用缓存的I/O
 这些函数都用文件描述符进行工作
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-### 标准I/O
+### 标准I/O(std_io.c)
 
 标准I/O函数提供一种对不用缓存的I/O函数的带缓存的界面
 
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
 ## IPC
 
-### 例子1
+### 例子1(pip1.c)
 
 创建一个从父进程到子进程的管道,并且父进程向子进程传递数据
 
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-### 例子2
+### 例子2(pipe2.c)
 
 下面程序每次显示一页数据,由于more具有这个功能,所以可以将输出的数据传递给more
 
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-### 例子3
+### 例子3(popen2.c)
 
 函数popen先执行fork,然后调用exec执行cmdstring
 并且返回一个标准I/O文件指针
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-### 例子4
+### 例子4(popen1.c)
 
 下面程序,向标准输出写一个提示
 然后从标准输入读入1行,使用popen可以在应用程序
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
 	exit(0);
 }
 ```
-### 例子5(两个半双工版本)
+### 例子5(pipe4.c两个半双工版本)
 
 当同一个程序产生某个过滤程序的输入,
 同时又读取该过滤程序的输出时,
