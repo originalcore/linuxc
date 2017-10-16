@@ -8,7 +8,7 @@ PROGS =	byteio cmd_action containerof cpmem daemon envi \
 	inotify inotifyep jmp localva strdup parr pbrb \
 	recd recdr recdw recu reverstr revert180 scan_cal \
 	bigend socketp stack stdouterr structnop swapno \
-	threadsync ttyname tdas idx2str pc spa
+	threadsync ttyname tdas idx2str pc spa epl
 
 all:	$(PROGS)
 
@@ -82,6 +82,9 @@ localva:	local_variable.o
 		$(CC) $(CFLAGS) -o $@ $^
 
 jmp:	jmp.o
+		$(CC) $(CFLAGS) -o $@ $^
+
+epl:	epoll.o
 		$(CC) $(CFLAGS) -o $@ $^
 
 inotifyep:	inotify_epoll.o
