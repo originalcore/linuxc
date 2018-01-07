@@ -26,3 +26,14 @@ inotify and epoll test
 	echo aaa > tmp/1
 	echo bbb > tmp/2
 	rm tmp/3
+
+inotify_example /tmp /home/user/temp
+
+	Press enter key to terminate.
+	Listening for events.
+	IN_OPEN: /home/user/temp/foo [file]
+	IN_CLOSE_WRITE: /home/user/temp/foo [file]
+	IN_OPEN: /tmp/ [directory]
+	IN_CLOSE_NOWRITE: /tmp/ [directory]
+
+	Listening for events stopped.

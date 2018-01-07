@@ -8,7 +8,7 @@ PROGS =	byteio cmd_action containerof cpmem daemon envi \
 	inotify inotifyep jmp localva strdup parr pbrb \
 	recd recdr recdw recu reverstr revert180 scan_cal \
 	bigend socketp stack stdouterr structnop swapno \
-	threadsync ttyname tdas idx2str pc spa epl
+	threadsync ttyname tdas idx2str pc spa epl inotify_example
 
 all:	$(PROGS)
 
@@ -127,6 +127,9 @@ cpuspd :	get_cpu_speed_from_cpuinfo.o
 		$(CC) $(CFLAGS) -o $@ $^
 
 getpwd :	get_exe_path.o
+		$(CC) $(CFLAGS) -o $@ $^
+
+inotify_example :	inotify_example.o
 		$(CC) $(CFLAGS) -o $@ $^
 
 clean:
