@@ -46,3 +46,7 @@ module : fb_md.c _md表示module后缀
 	:argdo! %s/MODULE/fb/ge | update
 
 手动修改顶层和子目录Makefile
+
+# example
+
+	gcc example.c -o example -Iinclude
