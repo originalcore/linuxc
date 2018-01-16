@@ -8,9 +8,13 @@ PROGS =	byteio cmd_action containerof cpmem daemon envi \
 	inotify inotifyep jmp localva strdup parr pbrb \
 	recd recdr recdw recu reverstr revert180 scan_cal \
 	bigend socketp stack stdouterr structnop swapno \
-	threadsync ttyname tdas idx2str pc spa epl inotify_example
+	threadsync ttyname tdas idx2str pc spa epl inotify_example \
+	dnotify_test
 
 all:	$(PROGS)
+
+dnotify_test: dnotify_test.o
+		$(CC) $(CFLAGS) -o $@ $^
 
 spa: struct_point_array.o
 		$(CC) $(CFLAGS) -o $@ $^
