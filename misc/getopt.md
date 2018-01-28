@@ -1,5 +1,7 @@
 # getopt函数的使用
 
+![command_line_componets](./command_line_componets.png)
+
 ```shell
 optstring a:bc:d::e
 -b -e 不接参数(右边没有分隔符)
