@@ -26,7 +26,7 @@ spa: struct_point_array.o
 		$(CC) $(CFLAGS) -o $@ $^
 
 pc:	pc.o
-		$(CC) $(CFLAGS) -lpthread -o $@ $^
+		$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
 idx2str:	use_index_find_string.o
 		$(CC) $(CFLAGS) -o $@ $^
@@ -38,7 +38,7 @@ ttyname:	ttyname.o
 		$(CC) $(CFLAGS) -o $@ $^
 
 threadsync:	thread_sync.o
-		$(CC) $(CFLAGS) -lpthread -o $@ $^
+		$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
 swapno:	swap_numbers.o
 		$(CC) $(CFLAGS) -o $@ $^
@@ -53,7 +53,7 @@ stack:	stack.o
 		$(CC) $(CFLAGS) -o $@ $^
 
 socketp:	socketpair.o
-		$(CC) $(CFLAGS) -lpthread -o $@ $^
+		$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
 bigend:	set_big_endless.o
 		$(CC) $(CFLAGS) -o $@ $^
