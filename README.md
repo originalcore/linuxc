@@ -1,5 +1,7 @@
 # Index
 
+[释放Linux内存](./free_memory.md)
+
 [使用dd制作数据文件](./gen_binary_image.md)
 
 [Add2Line](./addr2line/README.md)
