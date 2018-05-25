@@ -39,4 +39,6 @@ int main(int argc, char *argv[])
         printf("optind = %d\t\t", optind);
         printf("argv[optind] = %s\n", argv[optind]);
     }
+
+	return 0;
 }

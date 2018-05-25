@@ -44,7 +44,6 @@ struct option {
 int main(int argc, char *argv[])
 {
     int opt;
-    int digit_optind = 0;
     int option_index = 0;
     char *string = "r:o::n";
 
@@ -73,4 +72,6 @@ optional_argument 	(or 2) if the option takes an optional argument.
         printf("argv[optind] =%s\t\t", argv[optind]);
         printf("option_index = %d\n", option_index);
     }
+
+	return 0;
 }

@@ -14,7 +14,7 @@
 
 [虚拟内存管理起到什么作用](./misc/mmu.md)
 
-[getopt函数的使用](./misc/getopt.md)
+[各种语言中的getopt使用](./getopts)
 
 [main函数的怎么写](./misc/main.md)
 
