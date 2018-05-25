@@ -4,7 +4,7 @@ LINK.c=$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
 CFLAGS= -Wall
 
 PROGS =	byteio cmd_action containerof cpmem daemon envi \
-	findnumber findsubstr cpuspd getpwd gopt initdarr \
+	findnumber findsubstr cpuspd getpwd gopt gopt_long initdarr \
 	inotify inotifyep jmp localva strdup parr pbrb \
 	recd recdr recdw recu reverstr revert180 scan_cal \
 	bigend socketp stack stdouterr structnop swapno \
@@ -107,6 +107,9 @@ initdarr:	init_array.o
 		$(CC) $(CFLAGS) -o $@ $^
 
 gopt:	getopt.o
+		$(CC) $(CFLAGS) -o $@ $^
+
+gopt_long:	getopt_long.o
 		$(CC) $(CFLAGS) -o $@ $^
 
 byteio:	byte_io.o
