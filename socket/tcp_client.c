@@ -9,9 +9,6 @@
 #define MAXLINE 80
 #define SERVER_PORT 8000
 
-/* client ip 192.168.1.100 */
-#define DESTINATION_IP	"192.168.1.224"
-
 int main(int argc, char *argv[])
 {
 	struct sockaddr_in dest_addr;
@@ -19,14 +16,16 @@ int main(int argc, char *argv[])
 	int sock_fd;
 	int bytes;
 	char *str;
+	char *target_ip;
 
-	if (argc != 2)
+	if (argc != 3)
 	{
-		printf("Usage : %s <message>\n", argv[0]);
+		printf("Usage : %s <target ip> <message>\n", argv[0]);
 		exit(1);
 	}
 
-	str = argv[1];
+	str = argv[2];
+	target_ip = argv[1];
 
 	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -34,7 +33,7 @@ int main(int argc, char *argv[])
 	bzero(&dest_addr, sizeof(dest_addr));
 	dest_addr.sin_family = AF_INET;
 	dest_addr.sin_port = htons(SERVER_PORT);
-	inet_pton(AF_INET, DESTINATION_IP, &dest_addr.sin_addr);
+	inet_pton(AF_INET, target_ip, &dest_addr.sin_addr);
 
 	/* connect server */
 	connect(sock_fd, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
