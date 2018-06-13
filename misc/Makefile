@@ -9,9 +9,12 @@ PROGS =	byteio cmd_action containerof cpmem daemon envi \
 	recd recdr recdw recu reverstr revert180 scan_cal \
 	bigend socketp stack stdouterr structnop swapno \
 	threadsync ttyname tdas idx2str pc spa epl inotify_example \
-	dnotify_test percent_star_d toggle_value mmap_test1
+	dnotify_test percent_star_d toggle_value mmap_test1 mmap_test2
 
 all:	$(PROGS)
+
+mmap_test2: mmap2.o
+		$(CC) $(CFLAGS) -o $@ $^
 
 mmap_test1: mmap1.o
 		$(CC) $(CFLAGS) -o $@ $^

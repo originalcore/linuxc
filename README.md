@@ -53,3 +53,5 @@
 [线程间同步,防止死锁原则](./misc/thread_sync.md)
 
 [Base64编码和解码](./base64)
+
+[mmap原理和实例](./misc/mmap.md)
