@@ -11,6 +11,10 @@
  * optstring a::b:c:d
  *
  * 看字符右边是否有":"
+ * 字符右边无冒号,无参数
+ * 字符右边有一个冒号,必须有参数
+ * 字符右边有二个冒号,参数可有可无
+ *
  * optstring 中的每一个字符都表示一个option
  * 每一个可带参数的option后面的参数叫做option argument(optarg)
  * 可带参数的选项参数保存在optarg中

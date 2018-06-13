@@ -13,7 +13,7 @@ def main():
         print "=================="
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "ho:v", ["help", "output="])
+        opts, args = getopt.getopt(sys.argv[1:], "a::ho:v", ["help", "output="])
     except getopt.GetoptError as err:
         # print help information and exit:
         print str(err)  # will print something like "option -a not recognized"
@@ -30,6 +30,10 @@ def main():
 
         if o == "-v":
             verbose = True
+        elif o == "-a":
+            if not a.strip() == '':
+                appendarg = a
+                print "appendarg = %s" % appendarg
         elif o in ("-h", "--help"):
             show_usage()
             sys.exit()
