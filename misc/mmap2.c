@@ -18,6 +18,8 @@ int print_usage(const char *name)
  * echo "abcd" >> test
  * or echo abcd > test
  * ./a.out test
+ * or create a file which size is
+ * larger than the context size
  */
 int main(int argc, char *argv[])
 {
@@ -27,10 +29,10 @@ int main(int argc, char *argv[])
 	char *mapped_mem;
 	size_t map_len = 1024;
 	void *start_addr = 0;
-	const char* context = "this is map file writting\n";
 
-	if (argc != 2)
-		return print_usage(argv[0]);
+	/* 被映射的文件大小一定要大于将要写入的数据大小 */
+	const char* context = "this is map file writting\n";
+	struct stat st;
 
 	fd = open(argv[1], O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
 	if (fd < 0)
@@ -39,8 +41,17 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 
+	fstat(fd, &st);
+	printf("filesize = %d\n", st.st_size);
+
+#ifdef IGNORE_ORIGIN_FILE_SIZE
 	/* 在文件最后添加一个空字符,以便mmap能够map操作正常 */
-	/* 一定要有这部操作,否则会发现只能写部分内容到文件中 */
+	/*
+	 * 一定要有这部操作,否则会发现只能写部分内容到文件中
+	 * 因为执行了lseek后文件大小变了
+	 * 也就是说mmap不能改变原文件大小
+	 * 在使用mmap后向文件中写入数据不能超过原文件大小
+	 */
 	/*
 	 * 可以使用gdb调试
 	 * gcc -g mmap2.c
@@ -53,6 +64,10 @@ int main(int argc, char *argv[])
 	write(fd, "\0", 1);
 	lseek(fd, 0, SEEK_SET);
 
+	fstat(fd, &st);
+	printf("filesize = %d\n", st.st_size);
+#endif
+
 	/* read write, private */
 	mapped_mem = mmap(start_addr, map_len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
@@ -62,8 +77,13 @@ int main(int argc, char *argv[])
 	/* read from map */
 	printf("read from map << %s\n", mapped_mem);
 
-	printf("write context to file\n");
 	len = strlen(context);
+
+	/* compare the file size and context ready for writting */
+	if (len > st.st_size)
+		printf("WARNNING : context should be truncked\n");
+
+	printf("write context to file\n");
 	/* write the map */
 	for (i = 0; i < len; i++)
 		mapped_mem[i] = context[i];
