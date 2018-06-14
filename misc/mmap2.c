@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 int print_usage(const char *name)
 {
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
 	}
 
 	fstat(fd, &st);
-	printf("filesize = %d\n", st.st_size);
+	printf("filesize = %lu\n", st.st_size);
 
 #ifdef IGNORE_ORIGIN_FILE_SIZE
 	/* 在文件最后添加一个空字符,以便mmap能够map操作正常 */
@@ -65,10 +66,16 @@ int main(int argc, char *argv[])
 	lseek(fd, 0, SEEK_SET);
 
 	fstat(fd, &st);
-	printf("filesize = %d\n", st.st_size);
+	printf("filesize = %lu\n", st.st_size);
 #endif
 
-	/* read write, private */
+#ifdef FILESIZE_ZERO_ASSERT
+	assert(st.st_size != 0);
+#endif
+	/*
+	 * if filesize equal to 0
+	 * Bus error (core dumped) will raise
+	 */
 	mapped_mem = mmap(start_addr, map_len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
 	/* now, file can be close safety */
