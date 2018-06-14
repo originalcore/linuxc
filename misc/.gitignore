@@ -38,3 +38,13 @@ idx2str
 pc
 spa
 epl
+dnotify_test
+inotify_example
+mmap2_test
+mmap3_test
+mmap_test1
+mmap_test2
+mmap_test3r
+mmap_test3w
+percent_star_d
+toggle_value
