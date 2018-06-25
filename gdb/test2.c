@@ -3,54 +3,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NUM_THREADS 5
+#define NUM_THREADS 2
 
-int count = 0;
-
-/* how can't gdb backtrace printout this functino? */
-void just_printout_msg(void)
-{
-	int i, j;
-
-	/* do a dummy thing, don't care */
-	for (i = 0; i < 10; i++)
-		j = i;
-
-	printf("Oops..., something terriable will happen!!\n");
-}
-
-void *error_maker(void *args)
+void error_maker(void)
 {
 	char *str = NULL;
 
-    while (1)
-    {
-        sleep(1);
+	printf("Oops..., something terriable will happen!!\n");
 
-        if (NUM_THREADS == count)
-        {
-			just_printout_msg();
-            *str = 'x';
-        }
-    }
+	*str = 'x';
+}
+
+void *start_routine(void *args)
+{
+	int cnt;
+
+	cnt = *(int *)args;
+
+	while (1)
+	{
+		sleep(4);
+		printf("pid %d, cnt = %d\n", getpid(), cnt);
+
+		if (NUM_THREADS == cnt)
+			error_maker();
+	}
 }
 
 int main(int argc, char *argv[])
 {
 	int i, ret;
+	int value;
 
     pthread_t tids[NUM_THREADS];
 
-    for (i = 0; i < NUM_THREADS; ++i)
+    for (i = 0; i < NUM_THREADS; i++)
     {
-        count = i + 1;
-        ret = pthread_create(&tids[i], NULL, error_maker, NULL);
-        if(ret != 0)
+		printf("i = %d\n", i);
+		value = i + 1;
+        ret = pthread_create(&tids[i], NULL, start_routine, &value);
+        if (ret != 0)
         {
 			perror("create thread error\n");
 			return -1;
         }
     }
 
-    pthread_exit( NULL );
+    //pthread_exit( NULL );
+	for (i = 0; i < NUM_THREADS; i++)
+		pthread_join(tids[i], NULL);
 }

@@ -1,7 +1,7 @@
 CC=gcc
 COMPILE.c=$(CC) $(CFLAGS) $(CPPFLAGS) -c
 LINK.c=$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
-CFLAGS= -Wall -g
+CFLAGS= -Wall -g -fno-omit-frame-pointer
 
 PROGS =	gout1 gout2
 
