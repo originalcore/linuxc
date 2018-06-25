@@ -1,5 +1,7 @@
 # Index
 
+[GDB 调试](./gdb/README.md)
+
 [释放Linux内存](./free_memory.md)
 
 [使用dd制作数据文件](./gen_binary_image.md)

@@ -5,6 +5,12 @@
 
 #define NUM_THREADS 2
 
+/*
+ * start routines functions point array
+ * contain all the start routines
+ */
+void *(*routines[NUM_THREADS])(void*);
+
 void error_maker(void)
 {
 	char *str = NULL;
@@ -14,7 +20,7 @@ void error_maker(void)
 	*str = 'x';
 }
 
-void *start_routine(void *args)
+void *start_routine1(void *args)
 {
 	int cnt;
 
@@ -22,34 +28,64 @@ void *start_routine(void *args)
 
 	while (1)
 	{
-		sleep(4);
-		printf("pid %d, cnt = %d\n", getpid(), cnt);
+		printf("%s, %d(value = %d)\n", __FUNCTION__, __LINE__, cnt);
+		sleep(cnt);
 
+#ifndef NO_ERROR_MAKER
 		if (NUM_THREADS == cnt)
 			error_maker();
+#endif
+	}
+}
+
+void *start_routine2(void *args)
+{
+	int cnt;
+
+	cnt = *(int *)args;
+
+	while (1)
+	{
+		printf("%s, %d(value = %d)\n", __FUNCTION__, __LINE__, cnt);
+		sleep(cnt);
+
+#ifndef NO_ERROR_MAKER
+		if (NUM_THREADS == cnt)
+			error_maker();
+#endif
 	}
 }
 
 int main(int argc, char *argv[])
 {
-	int i, ret;
-	int value;
+	int ret, i;
+	int values[NUM_THREADS] = {1, 2};
 
     pthread_t tids[NUM_THREADS];
 
-    for (i = 0; i < NUM_THREADS; i++)
-    {
-		printf("i = %d\n", i);
-		value = i + 1;
-        ret = pthread_create(&tids[i], NULL, start_routine, &value);
-        if (ret != 0)
-        {
+	/* init the function point array */
+	routines[0] = start_routine1;
+	routines[1] = start_routine2;
+
+	for (i = 0; i < NUM_THREADS; i++)
+	{
+		ret = pthread_create(&tids[i], NULL, routines[i], &values[i]);
+		if (ret != 0)
+		{
 			perror("create thread error\n");
 			return -1;
-        }
-    }
+		}
 
-    //pthread_exit( NULL );
+		/*
+		 * shouldn't join here
+		 * or there just one child thread running not two
+		 */
+		//pthread_join(tids[i], NULL);
+	}
+
+	/* joint the child threads at the end */
 	for (i = 0; i < NUM_THREADS; i++)
 		pthread_join(tids[i], NULL);
+
+	return 0;
 }
