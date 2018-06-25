@@ -17,6 +17,15 @@ void error_maker(void)
 
 	printf("Oops..., something terriable will happen!!\n");
 
+#ifdef BUG_FIX
+	str = malloc(sizeof(char));
+	if (NULL == str)
+	{
+		perror("malloc error\n");
+		exit(-1);
+	}
+#endif
+
 	*str = 'x';
 }
 
