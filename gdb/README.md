@@ -16,6 +16,10 @@
 
 	echo /path/to/core_%e_%t_%p > /proc/sys/kernel/core_pattern
 
+如果没有上面节点,需要配置内核
+
+	CONFIG_COREDUMP
+
 ## 使用coredump
 
 使用gdb和coredump调试程序(格式如下)
