@@ -6,19 +6,23 @@
 ====================================
 Python getopt exaple usage
 
-print "python_getopt -h"
-print "python_getopt --help"
-print "python_getopt -o <arg>"
-print "python_getopt --output <arg>"
-print "python_getopt -v"
+print "python_getopt <-h | --help>"
+print "python_getopt <-v | --verbose>"
+print "python_getopt <-p | --path> <arg>"
+print "python_getopt --longopt_no_args"
+print "python_getopt -s <arg>"
 ====================================
 '''
 
 import getopt, sys
 
-def main():
+def main(argv):
     def show_usage(docstring):
         print docstring.rstrip("\n")
+
+    if len(argv) < 2:
+        show_usage(__doc__)
+        sys.exit(1)
 
     # 看字符右边是否有":"
     # 单字符加冒号表示选项有且必须加参数
@@ -54,4 +58,4 @@ def main():
             print 'default'
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
