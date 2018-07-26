@@ -98,3 +98,50 @@
 - 可以看到有3个线程,主线程Thread1调用pthread_join
 - 子线程Thread2 未满足判断条件,所以处在sleep中
 - 子线程Thread3 满足判断条件,执行error_maker
+
+## 例子3
+
+分别在代码[test3.c](./test3.c)的18和27行打上断点,观察变量str分配内存前后地址变化
+
+	(gdb) b 18
+	Breakpoint 1 at 0x400876: file test2.c, line 18.
+	(gdb) b 27
+	Breakpoint 2 at 0x4008a9: file test2.c, line 27.
+	(gdb) r
+	Starting program: /home/anonymous/.g/linuxc/gdb/gout2
+	[Thread debugging using libthread_db enabled]
+	Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+	[New Thread 0x7ffff77ef700 (LWP 38330)]
+	start_routine1, 41(value = 1)
+	[New Thread 0x7ffff6fee700 (LWP 38331)]
+	start_routine2, 59(value = 2)
+	start_routine1, 41(value = 1)
+	start_routine1, 41(value = 1)
+	[Switching to Thread 0x7ffff6fee700 (LWP 38331)]
+
+当程序停在第一个断点时,观察str内存地址任然未0,为预期值
+
+	Thread 3 "gout2" hit Breakpoint 1, error_maker () at test2.c:18
+	18              printf("Oops..., something terriable will happen!!\n");
+	(gdb) x str
+	0x0:    Cannot access memory at address 0x0
+
+让程序继续跑起来知道第二个断点的地方,此时str地址变为0x7fffe80008c0
+
+	(gdb) c
+	Continuing.
+	start_routine1, 41(value = 1)
+	Oops..., something terriable will happen!!
+
+	Thread 3 "gout2" hit Breakpoint 2, error_maker () at test2.c:27
+	27              printf("str address ==> %p\n", str);
+
+	(gdb) x str
+	0x7fffe80008c0: 0x00000000
+
+在让程序执行一步,观察程序中打出来的地址也是0x7fffe80008c0
+
+	(gdb) n
+	start_routine1, 41(value = 1)
+	str address ==> 0x7fffe80008c0
+	30              *str = 'x';
