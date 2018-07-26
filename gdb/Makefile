@@ -4,7 +4,7 @@ CFLAGS= -Wall -g -fno-omit-frame-pointer
 CFLAGS3= -Wall -g -fno-omit-frame-pointer -DBUG_FIX
 #CFLAGS= -Wall -g -fno-omit-frame-pointer -DNO_ERROR_MAKER
 
-PROGS =	gout1 gout2 gout3 gout4 gout5
+PROGS =	gout1 gout2 gout3 gout4 gout5 gout6
 
 all:	$(PROGS)
 
@@ -28,6 +28,9 @@ gout4 : main.o foo.o bar.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 gout5 : set_var_return.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+gout6 : convenience.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
