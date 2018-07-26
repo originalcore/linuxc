@@ -1,9 +1,10 @@
 CC=gcc
 CFLAGS= -Wall -g -fno-omit-frame-pointer
+#CFLAGS= -Wall -gdwarf-2 -fno-omit-frame-pointer
 CFLAGS3= -Wall -g -fno-omit-frame-pointer -DBUG_FIX
 #CFLAGS= -Wall -g -fno-omit-frame-pointer -DNO_ERROR_MAKER
 
-PROGS =	gout1 gout2 gout3
+PROGS =	gout1 gout2 gout3 gout4
 
 all:	$(PROGS)
 
@@ -22,6 +23,9 @@ gout2: test2.o
 # gcc -Wall -g -fno-omit-frame-pointer -DBUG_FIX -o gout3 test3.o -lpthread
 gout3: test3.c
 	$(CC) $(CFLAGS3) -o $@ $^ -lpthread
+
+gout4 : main.o foo.o bar.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
 	rm -f $(PROGS) *.o core*

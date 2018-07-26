@@ -145,3 +145,32 @@
 	start_routine1, 41(value = 1)
 	str address ==> 0x7fffe80008c0
 	30              *str = 'x';
+
+## 例子4
+
+给指定文件中的函数打断点
+
+	$ gdb gtou4
+	(gdb) b main.c:stub_func
+	(gdb) b foo.c:foo_func
+	(gdb) b bar.c:bar_func
+	(gdb) r
+
+给程序传递参数,传递两个参数(abc, 123)
+
+	$ gdb --args gout4 abc 123
+
+查看参数个数和所有参数,argv是个数组
+
+	(gdb) p argc
+	$5 = 3
+	(gdb) p *argv@3
+	$6 = {0x7fffffffec5c "/home/anonymous/.g/linuxc/gdb/gout4", 0x7fffffffec80 "abc", 0x7fffffffec84 "123"}
+
+或者是进入gdb后通过(set args来传递)
+
+	(gdb) set args abc 123
+
+使用条件断点(其中condition里只能判断整数,详细见代码[main.c](./main.c))
+
+	(gdb) b line_number if condition
