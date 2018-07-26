@@ -174,3 +174,34 @@
 使用条件断点(其中condition里只能判断整数,详细见代码[main.c](./main.c))
 
 	(gdb) b line_number if condition
+
+## 例子5[set_var and return](./set_var_return.c)
+
+	(gdb) b main
+	Breakpoint 1 at 0x40055b: file set_var.c, line 14.
+	(gdb) r
+
+	Breakpoint 1, main (argc=1, argv=0x7fffffffea78) at set_var.c:14
+	14              a = 911;
+
+使用set var来改变变量的值
+
+	(gdb) n
+	16              ret = foo(a);
+	(gdb) s
+	foo (val=911) at set_var.c:5
+	5               printf("val = %d\n", val);
+	(gdb) p val
+	$1 = 911
+	(gdb) set val = 811
+
+使用return来迅速返回函数
+
+	(gdb) return 2
+	Make foo return now? (y or n) y
+	#0  0x000000000040056c in main (argc=1, argv=0x7fffffffea78) at set_var.c:16
+	16              ret = foo(a);
+	(gdb) n
+	17              printf("ret = %d\n", ret);
+	(gdb) p ret
+	$2 = 2
