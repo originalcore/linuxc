@@ -175,7 +175,7 @@
 
 	(gdb) b line_number if condition
 
-## 例子5[set_var and return](./set_var_return.c)
+## 例子5 [set_var and return](./set_var_return.c)
 
 	(gdb) b main
 	Breakpoint 1 at 0x40055b: file set_var.c, line 14.
@@ -252,10 +252,14 @@
 	$16 = "anonymous_8\000\001\000\000\000\000\000\000"
 	$17 = "anonymous_9\000\000\000\000\000\000\000\000"
 
-## 例子7使用display观察变量变化过程
+## 例子7 使用display观察变量变化过程
 
 	(gdb) b 16
 	(gdb) r
 	(gdb) display i
 	(gdb) display j
 	(gdb) n
+
+## 例子8 定位死锁问题
+
+[dead lock debug using gdb](./dead_lock.md)
