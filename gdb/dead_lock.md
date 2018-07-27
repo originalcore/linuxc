@@ -196,6 +196,11 @@ ps查看到的结果,进程已经休眠(Sl),死锁的概率很大
 
 	gdb gout8 -x debug.cmd
 
+或者在gdb中source该脚本
+
+	$ gdb gout8
+	(gdb) source debug.cmd
+
 查看输出的日志信息可以发现在astall.c 20行和22行两次加锁最终导致死锁
 
 	Breakpoint 2, 0x00007ffff7bc8ad0 in pthread_mutex_lock () from /lib64/libpthread.so.0
