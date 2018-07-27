@@ -183,7 +183,6 @@ ps查看到的结果,进程已经休眠(Sl),死锁的概率很大
 	set $addr2 = pthread_mutex_unlock
 	b *$addr1
 	b *$addr2
-	b *$addr2
 	while 1
 	c
 	if $pc != $addr1 && $pc != $addr2
