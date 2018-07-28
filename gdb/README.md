@@ -263,3 +263,61 @@
 ## 例子8 定位死锁问题
 
 [dead lock debug using gdb](./dead_lock.md)
+
+## 例子9 (例子8在android上测试)
+
+[如何使用GDB调试android应用程序](https://github.com/54shady/kernel_drivers_examples/blob/rk3288/debug/android_gdb.md)
+
+在android设备上运行程序
+
+	gdbserver :1234 astall
+
+在调试主机上调试
+
+	(gdb) source android_gdbenv.cmd
+	(gdb) source android_debug.cmd
+
+结果发现在android输出的结果并不理想(和PC上不太一致?)
+
+	Breakpoint 1 at 0xb6f1d3d2: file bionic/libc/bionic/pthread_mutex.cpp, line 503.
+	Breakpoint 2 at 0xb6f1d424: file bionic/libc/bionic/pthread_mutex.cpp, line 524.
+
+	Breakpoint 2, pthread_mutex_unlock (mutex_interface=0xb6f30208 <__dl__ZL21g_strerror_tls_buffer>)
+		at bionic/libc/bionic/pthread_mutex.cpp:524
+	524	int pthread_mutex_unlock(pthread_mutex_t* mutex_interface) {
+	#0  pthread_mutex_unlock (mutex_interface=0xb6f30208 <__dl__ZL21g_strerror_tls_buffer>) at bionic/libc/bionic/pthread_mutex.cpp:524
+	#1  0xb6f11592 in soinfo::call_function (this=0xb6f30224 <__dl__ZL7key_map>, function_name=0x0, function=0x0)
+		at bionic/linker/linker.cpp:2235
+	#2  0x00000000 in ?? ()
+
+	Breakpoint 2, pthread_mutex_unlock (mutex_interface=0xb6f30f68 <__dl__ZL18g_group_tls_buffer>)
+		at bionic/libc/bionic/pthread_mutex.cpp:524
+	524	int pthread_mutex_unlock(pthread_mutex_t* mutex_interface) {
+	#0  pthread_mutex_unlock (mutex_interface=0xb6f30f68 <__dl__ZL18g_group_tls_buffer>) at bionic/libc/bionic/pthread_mutex.cpp:524
+	#1  0xb6f1073a in __dl__GLOBAL__sub_I_stubs.cpp ()
+	   from /home/zeroway/rk3288-e810-android6.0/out/target/product/Gemini-E800/symbols/system/bin/linker
+	#2  0x00000000 in ?? ()
+
+	Breakpoint 2, pthread_mutex_unlock (mutex_interface=0xb6f30f6c <__dl__ZL19g_passwd_tls_buffer>)
+		at bionic/libc/bionic/pthread_mutex.cpp:524
+	524	int pthread_mutex_unlock(pthread_mutex_t* mutex_interface) {
+	#0  pthread_mutex_unlock (mutex_interface=0xb6f30f6c <__dl__ZL19g_passwd_tls_buffer>) at bionic/libc/bionic/pthread_mutex.cpp:524
+	#1  0xb6f11592 in soinfo::call_function (this=0xb6f30224 <__dl__ZL7key_map>, function_name=0x10 <Address 0x10 out of bounds>,
+		function=0x0) at bionic/linker/linker.cpp:2235
+	#2  0x00000000 in ?? ()
+
+	Breakpoint 2, pthread_mutex_unlock (mutex_interface=0xb6f30f60 <__dl__ZL15g_uselocale_key>) at bionic/libc/bionic/pthread_mutex.cpp:524
+	524	int pthread_mutex_unlock(pthread_mutex_t* mutex_interface) {
+	#0  pthread_mutex_unlock (mutex_interface=0xb6f30f60 <__dl__ZL15g_uselocale_key>) at bionic/libc/bionic/pthread_mutex.cpp:524
+	#1  0xb6f2155c in mbstate_set_byte (ps=0xb6f30f60 <__dl__ZL15g_uselocale_key>, i=0, byte=0 '\000') at bionic/libc/bionic/mbstate.cpp:41
+	#2  0xb6f2155c in mbstate_set_byte (ps=0xb6f30f60 <__dl__ZL15g_uselocale_key>, i=0, byte=0 '\000') at bionic/libc/bionic/mbstate.cpp:41
+	Backtrace stopped: previous frame identical to this frame (corrupt stack?)
+
+	Program received signal SIGINT, Interrupt.
+	syscall () at bionic/libc/arch-arm/bionic/syscall.S:44
+	44	    swi     #0
+	A debugging session is active.
+
+		Inferior 1 [process 1973] will be killed.
+
+	Quit anyway? (y or n) [answered Y; input not from terminal]
