@@ -108,7 +108,7 @@
 	(gdb) b 27
 	Breakpoint 2 at 0x4008a9: file test2.c, line 27.
 	(gdb) r
-	Starting program: /home/anonymous/.g/linuxc/gdb/gout2
+	Starting program: gout2
 	[Thread debugging using libthread_db enabled]
 	Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
 	[New Thread 0x7ffff77ef700 (LWP 38330)]
@@ -165,7 +165,7 @@
 	(gdb) p argc
 	$5 = 3
 	(gdb) p *argv@3
-	$6 = {0x7fffffffec5c "/home/anonymous/.g/linuxc/gdb/gout4", 0x7fffffffec80 "abc", 0x7fffffffec84 "123"}
+	$6 = {0x7fffffffec5c "gout4", 0x7fffffffec80 "abc", 0x7fffffffec84 "123"}
 
 或者是进入gdb后通过(set args来传递)
 
@@ -252,9 +252,9 @@
 	$16 = "anonymous_8\000\001\000\000\000\000\000\000"
 	$17 = "anonymous_9\000\000\000\000\000\000\000\000"
 
-## 例子7 使用display观察变量变化过程
+## 例子7 使用display观察变量变化过程[源码variables.c](./variables.c)
 
-	(gdb) b 16
+	(gdb) b do_something
 	(gdb) r
 	(gdb) display i
 	(gdb) display j
@@ -321,3 +321,55 @@
 		Inferior 1 [process 1973] will be killed.
 
 	Quit anyway? (y or n) [answered Y; input not from terminal]
+## 例子10 使用ignore跳过断点[源码variables.c](./variables.c)
+
+打上调试断点,查看断点信息
+
+	(gdb) b do_something
+	Breakpoint 1 at 0x400531: file variables.c, line 7.
+	(gdb) i b
+	Num     Type           Disp Enb Address            What
+	1       breakpoint     keep y   0x0000000000400531 in do_something at variables.c:7
+
+使用ignore来忽略断点1,忽略5次,再次查看断点信息
+
+	(gdb) ignore 1 5
+	Will ignore next 5 crossings of breakpoint 1.
+	(gdb) i b
+	Num     Type           Disp Enb Address            What
+	1       breakpoint     keep y   0x0000000000400531 in do_something at variables.c:7
+			ignore next 5 hits
+
+执行程序
+
+	(gdb) r
+	Starting program: gout7
+	do_something, 7[0]
+	do_something, 7[1]
+	do_something, 7[2]
+	do_something, 7[3]
+	do_something, 7[4]
+
+## 例子11 使用commands设置断点执行脚本[源码variables.c](./variables.c)
+
+设置调试断点,查看断点信息
+
+	(gdb) b do_something
+	Breakpoint 1 at 0x400531: file variables.c, line 7.
+	(gdb) i b
+	Num     Type           Disp Enb Address            What
+	1       breakpoint     keep y   0x0000000000400531 in do_something at variables.c:7
+
+使用commands设置断点1执行命令,并查看断点信息
+
+	(gdb) commands 1
+	Type commands for breakpoint(s) 1, one per line.
+	End with a line saying just "end".
+	>p time
+	>c
+	>end
+	(gdb) i b
+	Num     Type           Disp Enb Address            What
+	1       breakpoint     keep y   0x0000000000400531 in do_something at variables.c:7
+			p time
+			c

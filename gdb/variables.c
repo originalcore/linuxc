@@ -1,8 +1,10 @@
 #include <stdio.h>
 
-void do_something(void)
+static int g_cnt = 0;
+
+void do_something(int time)
 {
-	printf("%s, %d\n", __FUNCTION__, __LINE__);
+	printf("%s, %d[%k]\n", __FUNCTION__, __LINE__, time);
 }
 
 int main(int argc, char *argv[])
@@ -14,7 +16,10 @@ int main(int argc, char *argv[])
 	 * (gdb) display j
 	 */
 	for (i = 0, j = 100; i < 20 && j > 50; i++, j--)
-		do_something();
+	{
+		do_something(g_cnt);
+		g_cnt++;
+	}
 
 	return 0;
 }

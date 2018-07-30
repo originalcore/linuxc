@@ -34,7 +34,7 @@ gout5 : set_var_return.o
 gout6 : convenience.o
 	$(CC) $(CFLAGS) -o $@ $^
 
-gout7 : display_variable.o
+gout7 : variables.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 gout8: astall.o
