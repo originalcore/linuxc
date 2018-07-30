@@ -252,6 +252,14 @@
 	$16 = "anonymous_8\000\001\000\000\000\000\000\000"
 	$17 = "anonymous_9\000\000\000\000\000\000\000\000"
 
+另外可以通过设置下面两个属性让结构体显示更清新
+
+	(gdb) set print array on
+	(gdb) p people10
+
+	(gdb) set print pretty on
+	(gdb) p people10
+
 ## 例子7 使用display观察变量变化过程[源码variables.c](./variables.c)
 
 	(gdb) b do_something
