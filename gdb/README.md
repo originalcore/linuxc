@@ -381,3 +381,47 @@
 	1       breakpoint     keep y   0x0000000000400531 in do_something at variables.c:7
 			p time
 			c
+
+## 例子12 多线程调试(控制线程运行)[multi_thread.c](./multi_thread.c)
+
+多线程调试中,有时需要将其他不关心的线程停止,只运行关心的线程
+
+查看当前锁定线程的模式
+
+	show scheduler-locking
+
+- off：不锁定任何线程,也就是所有线程都执行，这是默认值
+- on：只有当前线程会执行
+- step：在单步的时候,除了next过一个函数的情况(熟悉情况的人可能知道，这其实是一个设置断点然后continue的行为)以外，只有当前线程会执行
+
+设置线程锁定模式
+
+	set scheduler-locking [off|on|step]
+
+例如这个实例中只想调试线程2
+
+	(gdb) start
+	(gdb) c
+
+查看线程情况
+
+	(gdb) i threads
+	  Id   Target Id         Frame
+	* 1    Thread 0x7ffff7fcf700 (LWP 7375) "gout9" 0x00007ffff7bc298d in pthread_join (threadid=140737345681152, thread_return=0x0)
+		at pthread_join.c:90
+	  2    Thread 0x7ffff77ef700 (LWP 7379) "gout9" 0x00007ffff78bc30d in nanosleep () at ../sysdeps/unix/syscall-template.S:84
+	  3    Thread 0x7ffff6fee700 (LWP 7380) "gout9" 0x00007ffff78bc30d in nanosleep () at ../sysdeps/unix/syscall-template.S:84
+
+切换到线程2
+
+	(gdb) thread 2
+	[Switching to thread 2 (Thread 0x7ffff77ef700 (LWP 7379))]
+	#0  0x00007ffff78bc30d in nanosleep () at ../sysdeps/unix/syscall-template.S:84
+	84      ../sysdeps/unix/syscall-template.S: No such file or directory.
+
+开启当线程调试模式,再次执行就只有一个指定线程在跑
+
+	(gdb) set scheduler-locking on
+	(gdb) c
+	Continuing.
+	***start_routine1, (value = 1)

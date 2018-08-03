@@ -40,5 +40,8 @@ gout7 : variables.o
 gout8: astall.o
 	$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
+gout9: multi_thread.o
+	$(CC) $(CFLAGS) -o $@ $^ -lpthread
+
 clean:
 	rm -f $(PROGS) *.o core*
