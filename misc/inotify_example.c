@@ -151,10 +151,11 @@ int main(int argc, char* argv[])
 	fds[NORMAL_EVENT_INDEX].fd = fd;
 	fds[NORMAL_EVENT_INDEX].events = POLLIN;
 
-	/* Wait for events and/or terminal input */
-	printf("Listening for events.\n");
 	while (1)
 	{
+		/* Wait for events and/or terminal input */
+		printf("Listening for events.\n");
+
 		poll_num = poll(fds, nfds, -1);
 		if (poll_num == -1) {
 			if (errno == EINTR)
@@ -163,6 +164,7 @@ int main(int argc, char* argv[])
 			exit(EXIT_FAILURE);
 		}
 
+		printf("event happen\n");
 		/* All events handle */
 		if (poll_num > 0)
 		{
