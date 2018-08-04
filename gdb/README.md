@@ -426,4 +426,30 @@
 	Continuing.
 	***start_routine1, (value = 1)
 
-## [例子13 动态库和静态库调试](./libdebug)
+## 例子13 信号处理
+
+在一个终端执行程序,另一个终端给程序发送信号SIGINT
+
+	./gouta
+	kill -2 `pidof gouta`
+
+在GDB调试中给程序发送信号
+
+	(gdb) file gouta
+	Reading symbols from gouta...done.
+	(gdb) r
+	Starting program: /linuxc/gdb/gouta
+	Runing...
+	Runing...
+	^C		<====这里ctr_c停止程序
+	Program received signal SIGINT, Interrupt.
+	0x00007ffff7ad92f0 in __nanosleep_nocancel () at ../sysdeps/unix/syscall-template.S:84
+	84      ../sysdeps/unix/syscall-template.S: No such file or directory.
+	(gdb) signal 2		<====发送信号2
+	Continuing with signal SIGINT.
+	Singal handler processing...
+	Signal:: Interrupt
+	Runing...
+	Runing...
+
+## [例子14 动态库和静态库调试](./libdebug)

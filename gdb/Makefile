@@ -5,7 +5,7 @@ CFLAGS3= -Wall -g -fno-omit-frame-pointer -DBUG_FIX
 #CFLAGS= -Wall -g -fno-omit-frame-pointer -DNO_ERROR_MAKER
 
 PROGS =	gout1 gout2 gout3 gout4 gout5 gout6 \
-		gout7 gout8
+		gout7 gout8 gout9 gouta
 
 all:	$(PROGS)
 
@@ -41,6 +41,9 @@ gout8: astall.o
 	$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
 gout9: multi_thread.o
+	$(CC) $(CFLAGS) -o $@ $^ -lpthread
+
+gouta: signal_test.o
 	$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
 clean:
