@@ -1,12 +1,12 @@
 # The sharelib name goes here
-TARGET  := libtest.so
+TARGET  := libtest_d.so
 
 # compile and lib parameter
 CC      := gcc
 LIBS    :=
 LDFLAGS :=
 DEFINES :=
-INCLUDE := -I../include
+INCLUDE := -I../../include
 CFLAGS  := -g -Wall -O3 $(DEFINES) $(INCLUDE)
 CXXFLAGS:= $(CFLAGS) -DHAVE_CONFIG_H
 SHARE   := -fPIC -shared -o

@@ -6,8 +6,8 @@ TARGET  := testapp
 
 # compile arguments
 CC      := gcc
-LIBS    := -ltest # link the libtest.so
-LDFLAGS := -L../lib # the lib locate here
+LIBS    := -ltest_d -ltest_s # link the libtest.so
+LDFLAGS := -L../lib/dynamic -L../lib/static
 DEFINES :=
 INCLUDE := -I../include
 CFLAGS  := -g -Wall -O3 $(DEFINES) $(INCLUDE)

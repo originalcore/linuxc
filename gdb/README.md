@@ -426,4 +426,4 @@
 	Continuing.
 	***start_routine1, (value = 1)
 
-## [例子13 动态库调试](./dynamic)
+## [例子13 动态库和静态库调试](./libdebug)
