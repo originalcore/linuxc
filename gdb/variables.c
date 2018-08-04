@@ -4,7 +4,7 @@ static int g_cnt = 0;
 
 void do_something(int time)
 {
-	printf("%s, %d[%k]\n", __FUNCTION__, __LINE__, time);
+	printf("%s, %d[%d]\n", __FUNCTION__, __LINE__, time);
 }
 
 int main(int argc, char *argv[])
