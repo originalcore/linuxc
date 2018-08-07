@@ -1,7 +1,5 @@
 # Index
 
-[libraries: libcutils.so: cannot open shared ...](./compile_error.md)
-
 [GDB 调试](./gdb/README.md)
 
 [释放Linux内存](./free_memory.md)
@@ -59,3 +57,5 @@
 [Base64编码和解码](./base64)
 
 [mmap原理和实例](./misc/mmap.md)
+
+[libraries: libcutils.so: cannot open shared ...](./compile_error.md)

@@ -1,8 +1,10 @@
 # GDB调试
 
+## GDB 使用coredump调试
+
 [参考文章gdb调试coredump](https://blog.csdn.net/sunxiaopengsun/article/details/72974548)
 
-## coredump配置
+### coredump配置
 
 查看系统是否打开coredump
 
@@ -20,7 +22,7 @@
 
 	CONFIG_COREDUMP
 
-## 使用coredump
+### 使用coredump
 
 使用gdb和coredump调试程序(格式如下)
 
@@ -455,3 +457,24 @@
 ## [例子14 动态库和静态库调试](./libdebug)
 ## [例子15 多进程调试](./multi_process.md)
 ## [例子16 同时调试多个应用程序](./multi_program)
+## 调试过程中的其它问题
+
+调试过程中遇到找不到libc库文件
+
+	Thread 2.1 "goutc" received signal SIGINT, Interrupt.
+	0x00007ffff78bc2f0 in __nanosleep_nocancel () at
+	../sysdeps/unix/syscall-template.S:84
+	84      ../sysdeps/unix/syscall-template.S: No such file or directory.
+
+可以下载libc源代码,添加到GDB搜索目录即可
+
+	(gdb) directory glibc-2.23/
+	(gdb) show directories
+	Source directories searched: /glibc-2.23:$cdir:$cwd
+
+添加后的结果如下,不报找不到文件的问题
+
+	Thread 2.1 "goutc" received signal SIGINT, Interrupt.
+	0x00007ffff78bc2f0 in __nanosleep_nocancel () at
+	../sysdeps/unix/syscall-template.S:84
+	84      in ../sysdeps/unix/syscall-template.S
