@@ -107,3 +107,7 @@
 
 	show print inferior-events
 	set print inferior-events [on | off]
+
+杀死某个进程,比如进程号4
+
+	kill inferiors 4
