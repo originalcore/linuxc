@@ -3,9 +3,12 @@ CFLAGS= -Wall -g -fno-omit-frame-pointer
 #CFLAGS= -Wall -gdwarf-2 -fno-omit-frame-pointer
 CFLAGS3= -Wall -g -fno-omit-frame-pointer -DBUG_FIX
 #CFLAGS= -Wall -g -fno-omit-frame-pointer -DNO_ERROR_MAKER
+OBJCOPY=objcopy
+STRIP=strip
 
 PROGS =	gout1 gout2 gout3 gout4 gout5 gout6 \
-		gout7 gout8 gout9 gouta goutb goutc
+		gout7 gout8 gout9 gouta goutb goutc \
+		goutd
 
 all:	$(PROGS)
 
@@ -51,6 +54,12 @@ goutb: recursion.o
 
 goutc: multi_process.o
 	$(CC) $(CFLAGS) -o $@ $^ -lpthread
+
+goutd: hello.o
+	$(CC) $(CFLAGS) -o $@ $^
+	$(OBJCOPY) --only-keep-debug $@ objcopy_$@.symbols
+	$(STRIP) --only-keep-debug $@ -o strip_$@.symbols
+	$(STRIP) $@
 
 clean:
 	rm -f $(PROGS) *.o core*
