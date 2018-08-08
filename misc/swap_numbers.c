@@ -2,6 +2,7 @@
 
 void myswap(int *a, int *b)
 {
+#ifdef BUG_FIX
 	/*
 	 * 这里面却存在着一个非常隐蔽的陷阱
 	 * 对于arr[n]中如果arr[i] == arr[j]
@@ -14,7 +15,13 @@ void myswap(int *a, int *b)
 	 */
 	if (a == b)
 		return;
+#endif
 
+	/*
+	 * if a and b point to the same area
+	 * *a ^= *b equal to *a = a[0] & a[0]
+	 * result is *a = 0
+	 */
 	*a ^= *b;
 	*b ^= *a;
 	*a ^= *b;
@@ -22,18 +29,20 @@ void myswap(int *a, int *b)
 
 int main(int argc, char **argv)
 {
-	int a, b;
-	printf("input number one:");
-	scanf("%d", &a);
-	printf("input number two:");
-	scanf("%d", &b);
+	int i, j;
+	int arr[] = {1, 2};
 
-	printf("a = %d, b = %d\n", a, b);
+	for (i = 0; i < 2; i++)
+		printf("%d\t", arr[i]);
+	printf("\n");
 
-	printf("swap them:\n");
-	myswap(&a, &b);
+	/* swap the same number will cause error */
+	for (i = 0, j = 1; i < 2, j < 2; i++, j++)
+		myswap(&arr[i], &arr[i]);
 
-	printf("a = %d, b = %d\n", a, b);
+	for (i = 0; i < 2; i++)
+		printf("%d\t", arr[i]);
+	printf("\n");
 
 	return 0;
 }
