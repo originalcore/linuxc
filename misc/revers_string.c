@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DBG_PRINT
+#undef DBG_PRINT
 
 #ifdef DBG_PRINT
 #define dbg_print	printf
@@ -38,11 +38,30 @@ void rever(char *str)
 
 int main(int argc, char **argv)
 {
-	//char *str = "abcdef"; /* Segmentation fault */
-	char str[] = "abcdef";
+	char *str = NULL;
+	int len;
+
+	if (argc < 2)
+	{
+		printf("%s <string>\n", argv[0]);
+		return -1;
+	}
+
+	len = strlen(argv[1]);
+	str = (char *)malloc(sizeof(char) * len);
+	if (NULL == str)
+	{
+		printf("malloc error\n");
+		return -2;
+	}
+
+	strncpy(str, argv[1], len);
+
 	printf("Org:%s\n", str);
 	rever(str);
 	printf("Rev:%s\n", str);
+
+	free(str);
 
 	return 0;
 }
