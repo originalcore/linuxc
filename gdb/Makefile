@@ -8,7 +8,7 @@ STRIP=strip
 
 PROGS =	gout1 gout2 gout3 gout4 gout5 gout6 \
 		gout7 gout8 gout9 gouta goutb goutc \
-		goutd
+		goutd goute
 
 all:	$(PROGS)
 
@@ -60,6 +60,9 @@ goutd: hello.o
 	$(OBJCOPY) --only-keep-debug $@ objcopy_$@.symbols
 	$(STRIP) --only-keep-debug $@ -o strip_$@.symbols
 	$(STRIP) $@
+
+goute: struct_display.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
 	rm -f $(PROGS) *.o core*
