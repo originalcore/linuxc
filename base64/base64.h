@@ -1,5 +1,5 @@
-#ifndef __BASE64_H_
-#define __BASE64_H_
+#ifndef __BASE64_H__
+#define __BASE64_H__
 
 #if defined(__cplusplus)
 extern "C" {

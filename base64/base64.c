@@ -4,6 +4,8 @@
  * divide input raw code into 6bit per group, a 6bit groub encoding to a visible char
  * raw input 000000	000000	000000	000000 ...
  * encode     a       a        a      a
+ *
+ * return the len of encode string
  */
 int base64encode(const unsigned char *input, int input_length, unsigned char *output, int output_length)
 {
@@ -45,6 +47,7 @@ int base64encode(const unsigned char *input, int input_length, unsigned char *ou
 	return j;
 }
 
+/* return the len of decode string */
 int base64decode(const unsigned char *input, int input_length, unsigned char *output, int output_length)
 {
 	int i = 0, j = 0, pad;
