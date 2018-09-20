@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
 ## IPC
 
-### 例子1(pip1.c)
+### 例子1(pipe1.c)
 
 创建一个从父进程到子进程的管道,并且父进程向子进程传递数据
 
@@ -178,10 +178,12 @@ int main(int argc, char *argv[])
 
 ### 例子3(popen2.c)
 
-函数popen先执行fork,然后调用exec执行cmdstring
-并且返回一个标准I/O文件指针
-如果type是"r",则文件指针连接到cmdstring的标准输出
-如果type是"w",则文件指针连接到cmdstring的标准输入
+popen调用流程
+
+- 函数popen先执行fork,子进程调用exec执行cmdstring
+- 返回一个标准I/O文件指针给主进程
+- 如果type是"r",则主进程的文件指针连接到子进程的标准输出
+- 如果type是"w",则主进程的文件指针连接到子进程的标准输入
 
 ![popen](./popen.png)
 
@@ -241,6 +243,12 @@ int main(int argc, char *argv[])
 	char line[MAXLINE];
 	FILE *fpin;
 
+	/*
+	 * popen调用fork创建两个进程
+	 * 子进程调用exec来执行传给popen的cmdstring
+	 * 当type 是r时子进程将执行结果输出到主进程的fp
+	 * fp就是popen的返回值
+	 */
 	if ( (fpin = popen("./myuclc", "r")) == NULL )
 		err_sys("popen error");
 
@@ -249,7 +257,11 @@ int main(int argc, char *argv[])
 		fputs("prompt> ", stdout);
 		fflush(stdout);
 
-		/* read from pipe */
+		/*
+		 * 从标准输入获取数据,传给myuclc处理后
+		 * myuclc将结果输出给fpin
+		 * fgets将fpin中的数据拷贝到line中
+		 */
 		if (fgets(line, MAXLINE, fpin) == NULL)
 			break;
 
@@ -398,7 +410,6 @@ int main(int argc, char *argv[])
 }
 ```
 
-如果测试SIG_PIPE
+如何测试SIG_PIPE功能
 
 当程序正在等待输入是,若杀死add2协同程序,然后输入两个数,这时再对管道进行操作时,由于该管道无法读进程,于是调用信号处理程序
-
