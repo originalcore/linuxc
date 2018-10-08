@@ -2,6 +2,10 @@
 #include <unistd.h>
 #include <getopt.h>
 
+/* The perdefine must declare ahead of the header file */
+//#define LNXC_DEBUG
+#define LNXC_INFO
+#include "lnxc_print.h" /* lnxc print wrapper */
 /*
  * optind is the index of the next element to be processed in argv
  */
@@ -36,12 +40,32 @@ int main(int argc, char *argv[])
     int opt;
     char *string = "a::b:c:d";
 
-    while ( (opt = getopt(argc, argv, string)) != -1 )
+	/* usually EOF is equal to -1 */
+    while ( (opt = getopt(argc, argv, string)) != EOF )
     {
-        printf("opt = %c\t\t", opt);
-        printf("optarg = %s\t\t", optarg);
-        printf("optind = %d\t\t", optind);
-        printf("argv[optind] = %s\n", argv[optind]);
+        lnxc_dbg("opt = %c\n", opt);
+        lnxc_dbg("optarg = %s\n", optarg);
+        lnxc_dbg("optind = %d\n", optind);
+        lnxc_dbg("argv[optind] = %s\n", argv[optind]);
+
+		switch (opt)
+		{
+			case 'a':
+				lnxc_info("option args = %s\n", optarg);
+				break;
+			case 'b':
+				lnxc_info("option args = %s\n", optarg);
+				break;
+			case 'c':
+				lnxc_info("option args = %s\n", optarg);
+				break;
+			case 'd':
+				lnxc_info("option args = %s\n", optarg);
+				break;
+			default:
+				lnxc_info("unknow args\n");
+				break;
+		}
     }
 
 	return 0;
