@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 	enqueue(p);
 	p = make_node(250);
 	enqueue(p);
-	while (p = dequeue()) {
+	while ((p = dequeue())) {
 		print_item(p);
 		free_node(p);
 	}
