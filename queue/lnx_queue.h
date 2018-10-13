@@ -12,5 +12,6 @@ void enqueue(struct node *p);
 struct node* dequeue(void);
 void free_node(struct node *p);
 void traverse(void (*visit) (struct node*));
+int is_empty(void);
 
 #endif

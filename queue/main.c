@@ -13,8 +13,12 @@ int main(int argc, char **argv)
 	int i;
 
 	printf("Enqueue:\n");
+
 	for (i = 1; i < argc; i++)
 	{
+		if (is_empty())
+			printf("empty\n");
+
 		printf("\nenqueue %d\n", atoi(argv[i]));
 		p = make_node(atoi(argv[i]));
 		enqueue(p);
@@ -23,6 +27,9 @@ int main(int argc, char **argv)
 		traverse(print_item);
 	}
 	printf("\n===========================\n");
+	if (is_empty())
+		printf("empty\n");
+
 	printf("Dequeue:\n");
 	while ((p = dequeue()))
 	{

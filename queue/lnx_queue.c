@@ -97,3 +97,8 @@ void traverse(void (*visit) (struct node*))
 	for (p = head->next; p != head; p = p->next)
 		visit(p);
 }
+
+int is_empty(void)
+{
+	return head->next == &sentinel;
+}
