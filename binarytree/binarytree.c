@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "binarytree.h"
 #include "lnx_queue.h"
+#include "lnx_stack.h"
 
 static struct node* make_node(unsigned char item)
 {
@@ -146,4 +147,79 @@ void level_order(struct node *root)
 
 	/* free queue */
 	traverse(free_Qnode);
+}
+
+/*
+ * 非递归遍历
+ * 从节点出发向左走到头(边走边记录访问过的节点, 放到栈里)
+ * 然后退回到该节点,再进入右子树,再重复前面操作
+ *
+ * 前序遍历
+ * 1. 先访问节点数据
+ * 2. 以后再访问该节点右孩子的数据(将其压入栈)
+ * 3. 因而可以不记录该节点(左节点)而直接记录该节点的右孩子
+ */
+void pre_order_nonrecursion(struct node *root)
+{
+	while (1)
+	{
+		while (root)
+		{
+			/* 访问节点数据 */
+			printf("%d", root->item);
+
+			/* 将右节点压入栈 */
+			if (root->right)
+				lnx_stack_push(root->right);
+
+			/* 继续遍历左节点 */
+			root = root->left;
+		}
+
+		/* 栈里所有数据访问结束 */
+		if (lnx_stack_is_empty())
+			break;
+
+		/* 开始访问右节点 */
+		root = lnx_stack_pop();
+	}
+}
+
+void in_order_nonrecursion(struct node *root)
+{
+	while (1)
+	{
+		/* 线路记录 : 将沿路访问过的节点压入栈 */
+		for (; root != NULL; root = root->left)
+			lnx_stack_push(root);
+
+		/* 所有节点都处理完 */
+		if (lnx_stack_is_empty())
+			break;
+
+		/* 开始访问节点数据 */
+		root = lnx_stack_pop();
+		printf("%d", root->item);
+
+		/* 访问右节点 */
+		root = root->right;
+	}
+}
+
+void post_order_nonrecursion(struct node *root)
+{
+	while (root != NULL || !lnx_stack_is_empty())
+	{
+		/* 线路记录 : 将沿路访问过的节点压入栈 */
+		for (; root != NULL; root = root->left)
+			lnx_stack_push(root);
+
+		root = lnx_stack_pop();
+		printf("%d", root->item);
+
+		if (!lnx_stack_is_empty() && root == lnx_stack_peek()->left)
+			root = lnx_stack_peek()->right;
+		else
+			root = NULL;
+	}
 }

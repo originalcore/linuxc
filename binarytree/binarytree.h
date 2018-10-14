@@ -9,5 +9,7 @@ int count(struct node *t);
 int depth(struct node *t);
 void destroy(struct node *t);
 void level_order(struct node *root);
-
+void pre_order_nonrecursion(struct node *root);
+void in_order_nonrecursion(struct node *root);
+void post_order_nonrecursion(struct node *root);
 #endif

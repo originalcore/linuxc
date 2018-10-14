@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include "binarytree.h"
-#include "common.h"
+
+void print_item(struct node *p)
+{
+	printf("%d", p->item);
+}
 
 int main(int argc, char **argv)
 {
@@ -21,12 +25,24 @@ int main(int argc, char **argv)
 	pre_order(root, print_item);
 	putchar('\n');
 
+	printf("pre_non: ");
+	pre_order_nonrecursion(root);
+	putchar('\n');
+
 	printf("in: ");
 	in_order(root, print_item);
 	putchar('\n');
 
+	printf("in_non: ");
+	in_order_nonrecursion(root);
+	putchar('\n');
+
 	printf("post: ");
 	post_order(root, print_item);
+	putchar('\n');
+
+	printf("post_non: ");
+	post_order_nonrecursion(root);
 	putchar('\n');
 
 	printf("level: ");
