@@ -125,7 +125,7 @@ void level_order(struct node *root)
 		return;
 
 	/* 出列的节点 */
-	struct Qnode *popup_node;
+	struct lnx_queue_node *popup_node;
 
 	/*
 	 * 1. 将二叉树的根结点入队列
@@ -146,7 +146,7 @@ void level_order(struct node *root)
 	}
 
 	/* free queue */
-	traverse(free_Qnode);
+	traverse(free_lnx_queue_node);
 }
 
 /*

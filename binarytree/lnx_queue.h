@@ -1,16 +1,16 @@
 #ifndef __LNX_QUEUE__
 #define __LNX_QUEUE__
 
-struct Qnode {
+struct lnx_queue_node {
 	struct node *np; /* 数据域是二差树的节点 */
-	struct Qnode *prev;
-	struct Qnode *next;
+	struct lnx_queue_node *prev;
+	struct lnx_queue_node *next;
 };
 
 void enqueue(struct node *pn);
-struct Qnode* dequeue(void);
-void free_Qnode(struct Qnode *p);
-void traverse(void (*visit) (struct Qnode*));
+struct lnx_queue_node* dequeue(void);
+void free_lnx_queue_node(struct lnx_queue_node *p);
+void traverse(void (*visit) (struct lnx_queue_node*));
 int is_empty(void);
 
 #endif

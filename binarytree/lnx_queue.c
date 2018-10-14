@@ -13,16 +13,16 @@
  * 情况用同样的代码,添加这个哨岗
  * 就能将这些特殊情况转化为一般情况
  */
-struct Qnode sentinel;
-struct Qnode sentinel = {0, &sentinel, &sentinel};
+struct lnx_queue_node sentinel;
+struct lnx_queue_node sentinel = {0, &sentinel, &sentinel};
 
-static struct Qnode *head = &sentinel;
+static struct lnx_queue_node *head = &sentinel;
 
-static struct Qnode* make_Qnode(struct node *np)
+static struct lnx_queue_node* make_lnx_queue_node(struct node *np)
 {
-	struct Qnode *p = NULL;
+	struct lnx_queue_node *p = NULL;
 
-	p = malloc(sizeof(struct Qnode));
+	p = malloc(sizeof(struct lnx_queue_node));
 	p->np = np;
 	p->prev = NULL;
 	p->next = NULL;
@@ -30,18 +30,18 @@ static struct Qnode* make_Qnode(struct node *np)
 	return p;
 }
 
-void free_Qnode(struct Qnode *p)
+void free_lnx_queue_node(struct lnx_queue_node *p)
 {
 	free(p);
 }
 
-static void insert(struct Qnode* p)
+static void insert(struct lnx_queue_node* p)
 {
 	p->next = head->next;
 	head->next->prev = p;
 
 	/*
-	 * head的next指向新插入的Qnode
+	 * head的next指向新插入的lnx_queue_node
 	 * 这是个前插操作
 	 * head->Pn->Pn-1...->P2->P1
 	 */
@@ -49,7 +49,7 @@ static void insert(struct Qnode* p)
 	p->prev = head;
 }
 
-static void delete(struct Qnode* p)
+static void delete(struct lnx_queue_node* p)
 {
 	p->prev->next = p->next;
 	p->next->prev = p->prev;
@@ -57,30 +57,30 @@ static void delete(struct Qnode* p)
 
 void enqueue(struct node *pn)
 {
-	struct Qnode *p;
+	struct lnx_queue_node *p;
 
-	p = make_Qnode(pn);
+	p = make_lnx_queue_node(pn);
 	insert(p);
 }
 
 /* 尾部出列 */
-struct Qnode* dequeue(void)
+struct lnx_queue_node* dequeue(void)
 {
 	/* 空链表 */
 	if (head->prev == head)
 		return NULL;
 	else
 	{
-		struct Qnode *p = head->prev;
+		struct lnx_queue_node *p = head->prev;
 		delete(p);
 		return p;
 	}
 }
 
 /* 从head的next开始遍历 */
-void traverse(void (*visit) (struct Qnode*))
+void traverse(void (*visit) (struct lnx_queue_node*))
 {
-	struct Qnode *p;
+	struct lnx_queue_node *p;
 
 	for (p = head->next; p != head; p = p->next)
 		visit(p);
