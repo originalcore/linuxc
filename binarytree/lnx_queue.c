@@ -35,7 +35,7 @@ void free_lnx_queue_node(struct lnx_queue_node *p)
 	free(p);
 }
 
-static void insert(struct lnx_queue_node* p)
+static void lnx_queue_insert(struct lnx_queue_node* p)
 {
 	p->next = head->next;
 	head->next->prev = p;
@@ -55,16 +55,16 @@ static void delete(struct lnx_queue_node* p)
 	p->next->prev = p->prev;
 }
 
-void enqueue(struct node *pn)
+void lnx_queue_enqueue(struct node *pn)
 {
 	struct lnx_queue_node *p;
 
 	p = make_lnx_queue_node(pn);
-	insert(p);
+	lnx_queue_insert(p);
 }
 
 /* 尾部出列 */
-struct lnx_queue_node* dequeue(void)
+struct lnx_queue_node* lnx_queue_dequeue(void)
 {
 	/* 空链表 */
 	if (head->prev == head)
@@ -78,7 +78,7 @@ struct lnx_queue_node* dequeue(void)
 }
 
 /* 从head的next开始遍历 */
-void traverse(void (*visit) (struct lnx_queue_node*))
+void lnx_queue_traverse(void (*visit) (struct lnx_queue_node*))
 {
 	struct lnx_queue_node *p;
 
@@ -86,7 +86,7 @@ void traverse(void (*visit) (struct lnx_queue_node*))
 		visit(p);
 }
 
-int is_empty(void)
+int lnx_queue_is_empty(void)
 {
 	return head->next == &sentinel;
 }

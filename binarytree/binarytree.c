@@ -134,19 +134,19 @@ void level_order(struct node *root)
 	 * 	  右子树的根结点(非空)分别入队列
 	 * 4. 重复2,3,直至队列中没有元素
 	 */
-	enqueue(root);
-	while (!is_empty())
+	lnx_queue_enqueue(root);
+	while (!lnx_queue_is_empty())
 	{
-		popup_node = dequeue();
+		popup_node = lnx_queue_dequeue();
 		printf("%d\t", popup_node->np->item);
 		if (popup_node->np->left)
-			enqueue(popup_node->np->left);
+			lnx_queue_enqueue(popup_node->np->left);
 		if (popup_node->np->right)
-			enqueue(popup_node->np->right);
+			lnx_queue_enqueue(popup_node->np->right);
 	}
 
 	/* free queue */
-	traverse(free_lnx_queue_node);
+	lnx_queue_traverse(free_lnx_queue_node);
 }
 
 /*

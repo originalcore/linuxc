@@ -7,10 +7,10 @@ struct lnx_queue_node {
 	struct lnx_queue_node *next;
 };
 
-void enqueue(struct node *pn);
-struct lnx_queue_node* dequeue(void);
+void lnx_queue_enqueue(struct node *pn);
+struct lnx_queue_node* lnx_queue_dequeue(void);
 void free_lnx_queue_node(struct lnx_queue_node *p);
-void traverse(void (*visit) (struct lnx_queue_node*));
-int is_empty(void);
+void lnx_queue_traverse(void (*visit) (struct lnx_queue_node*));
+int lnx_queue_is_empty(void);
 
 #endif
