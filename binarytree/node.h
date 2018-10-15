@@ -2,7 +2,7 @@
 #define __NODE_H__
 
 struct BinaryTree {
-	unsigned char item;
+	unsigned int item;
 	struct BinaryTree *left;
 	struct BinaryTree *right;
 };

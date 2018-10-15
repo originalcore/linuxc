@@ -242,13 +242,18 @@ void show_item_infos(TreeNode *pTNode, const char *msg)
 
 /* 先序创建二叉树:根结点 -> 左子树 -> 右子树 */
 /* 按提示输入421003006500700 */
-/* GCC no-stack-protector MUST DEFINE */
 BiTree precreate_btree(void (*prompt)(TreeNode *, const char *child), TreeNode *parent, const char *msg)
 {
-	unsigned char item;
+	unsigned int item;
 	BiTree bTree = NULL;
 
 	prompt(parent, msg);
+
+	/*
+	 * BugFix : *** stack smashing detected ***
+	 * scanf %d 对应32位
+	 * 如果item只有8位将导致栈溢出
+	 */
 	scanf("%d", &item);
 
 	/* 用0来结束创建节点 */
