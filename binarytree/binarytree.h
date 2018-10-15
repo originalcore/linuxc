@@ -13,5 +13,6 @@ void pre_order_nonrecursion(TreeNode *pTNode);
 void in_order_nonrecursion(TreeNode *pTNode);
 void post_order_nonrecursion(TreeNode *pTNode);
 BiTree precreate_btree(void (*prompt)(TreeNode *, const char *child), TreeNode *parent, const char *msg);
+BiTree fork_tree(BiTree bTree);
 void show_item_infos(TreeNode *pTNode, const char *msg);
 #endif

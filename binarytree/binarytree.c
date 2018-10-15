@@ -263,3 +263,22 @@ BiTree precreate_btree(void (*prompt)(TreeNode *, const char *child), TreeNode *
 
 	return bTree;
 }
+
+/* fork a tree */
+BiTree fork_tree(BiTree bTree)
+{
+	TreeNode *lchild;
+	TreeNode *rchild;
+	TreeNode *pTNode;
+
+	if (!bTree)
+		return NULL;
+
+	lchild = fork_tree(bTree->left);
+	rchild = fork_tree(bTree->right);
+	pTNode = make_node(bTree->item);
+	pTNode->left = lchild;
+	pTNode->right = rchild;
+
+	return pTNode;
+}
