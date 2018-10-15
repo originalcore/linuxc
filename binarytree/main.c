@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 	putchar('\n');
 	printf("tree1 : count = %d depth = %d\n", tree_leavess(bTree), tree_depth(bTree));
 
-	printf("TEST2 : Create btree by pre order\n");
+	printf("TEST2 : Create btree by pre order(421003006500700)\n");
 	BiTree preTree = NULL;
 	preTree = precreate_btree(show_item_infos, NULL, "root");
 	printf("pre: ");
@@ -67,8 +67,17 @@ int main(int argc, char **argv)
 	putchar('\n');
 	printf("tree3 : count = %d depth = %d\n", tree_leavess(forkTree), tree_depth(forkTree));
 
-	tree_destroy(preTree);
+	printf("TEST4 find node\n");
+	TreeNode *pTNode;
+	pTNode = find_node(bTree, 1);
+	printf("data = %d\n", pTNode->item);
+	pTNode = find_node(preTree, 3);
+	printf("data = %d\n", pTNode->item);
+	pTNode = find_node(forkTree, 7);
+	printf("data = %d\n", pTNode->item);
+
 	tree_destroy(bTree);
+	tree_destroy(preTree);
 	tree_destroy(forkTree);
 
 	return 0;

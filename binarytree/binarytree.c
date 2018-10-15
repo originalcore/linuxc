@@ -282,3 +282,32 @@ BiTree fork_tree(BiTree bTree)
 
 	return pTNode;
 }
+
+/*
+ * 查找节点
+ * 成功返回相应节点指针
+ * 失败返回NULL
+ */
+TreeNode *find_node(BiTree bTree, unsigned char item)
+{
+	TreeNode *pTNode;
+
+	/* TreeNode is NULL */
+	if (!bTree)
+		return NULL;
+	else
+	{
+		if (item == bTree->item)
+			return bTree;
+		else
+		{
+			if (pTNode = find_node(bTree->left, item))
+				return pTNode;
+			if (pTNode = find_node(bTree->right, item))
+				return pTNode;
+
+			/* end of search, no this item */
+			return NULL;
+		}
+	}
+}
