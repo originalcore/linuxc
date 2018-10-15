@@ -44,15 +44,17 @@ BiTree init(unsigned char VLR[], unsigned char LVR[], int n)
  * 先访问根
  * 再遍历所有左子节点
  * 再遍历所有右子节点
+ *
+ * 第一个参数是数
  */
-void pre_order(TreeNode *pTNode, void(*visit)(TreeNode *))
+void pre_order(BiTree bTree, void(*visit)(TreeNode *))
 {
-	if (!pTNode)
+	if (!bTree)
 		return;
 
-	visit(pTNode);
-	pre_order(pTNode->left, visit);
-	pre_order(pTNode->right, visit);
+	visit(bTree);
+	pre_order(bTree->left, visit);
+	pre_order(bTree->right, visit);
 }
 
 /*
@@ -61,14 +63,14 @@ void pre_order(TreeNode *pTNode, void(*visit)(TreeNode *))
  * 再访问根
  * 再遍历所有右子节点
  */
-void in_order(TreeNode *pTNode, void(*visit)(TreeNode *))
+void in_order(BiTree bTree, void(*visit)(TreeNode *))
 {
-	if (!pTNode)
+	if (!bTree)
 		return;
 
-	in_order(pTNode->left, visit);
-	visit(pTNode);
-	in_order(pTNode->right, visit);
+	in_order(bTree->left, visit);
+	visit(bTree);
+	in_order(bTree->right, visit);
 }
 
 /*
@@ -77,25 +79,25 @@ void in_order(TreeNode *pTNode, void(*visit)(TreeNode *))
  * 再遍历所有右子节点
  * 再访问根
  */
-void post_order(TreeNode *pTNode, void(*visit)(TreeNode *))
+void post_order(BiTree bTree, void(*visit)(TreeNode *))
 {
-	if (!pTNode)
+	if (!bTree)
 		return;
 
-	post_order(pTNode->left, visit);
-	post_order(pTNode->right, visit);
-	visit(pTNode);
+	post_order(bTree->left, visit);
+	post_order(bTree->right, visit);
+	visit(bTree);
 }
 
-int count(TreeNode *pTNode)
+int tree_leavess(BiTree bTree)
 {
-	if (!pTNode)
+	if (!bTree)
 		return 0;
 
-	return 1 + count(pTNode->left) + count(pTNode->right);
+	return 1 + tree_leavess(bTree->left) + tree_leavess(bTree->right);
 }
 
-int depth(TreeNode *pTNode)
+int tree_depth(BiTree bTree)
 {
 	/*
 	 * dl:depth of left child
@@ -103,17 +105,17 @@ int depth(TreeNode *pTNode)
 	 */
 	int dl, dr;
 
-	if (!pTNode)
+	if (!bTree)
 		return 0;
 
-	dl = depth(pTNode->left);
-	dr = depth(pTNode->right);
+	dl = tree_depth(bTree->left);
+	dr = tree_depth(bTree->right);
 
 	/* 深度去左右子树大的 */
 	return 1 + (dl > dr ? dl : dr);
 }
 
-void destroy(BiTree bTree)
+void tree_destroy(BiTree bTree)
 {
 	post_order(bTree, free_node);
 }
@@ -228,4 +230,36 @@ void post_order_nonrecursion(BiTree bTree)
 		else
 			pTNode = NULL;
 	}
+}
+
+void show_item_infos(TreeNode *pTNode, const char *msg)
+{
+	if (pTNode)
+		printf("%d's %s:", pTNode->item, msg);
+	else
+		printf("%s:", msg);
+}
+
+/* 先序创建二叉树:根结点 -> 左子树 -> 右子树 */
+/* 按提示输入421003006500700 */
+/* GCC no-stack-protector MUST DEFINE */
+BiTree precreate_btree(void (*prompt)(TreeNode *, const char *child), TreeNode *parent, const char *msg)
+{
+	unsigned char item;
+	BiTree bTree = NULL;
+
+	prompt(parent, msg);
+	scanf("%d", &item);
+
+	/* 用0来结束创建节点 */
+	if (item == 0)
+		bTree = NULL;
+	else
+	{
+		bTree = make_node(item);
+		bTree->left = precreate_btree(show_item_infos, bTree, "left");
+		bTree->right = precreate_btree(show_item_infos, bTree, "right");
+	}
+
+	return bTree;
 }

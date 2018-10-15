@@ -49,9 +49,16 @@ int main(int argc, char **argv)
 	level_order(bTree);
 	putchar('\n');
 
-	printf("count=%d depth=%d\n", count(bTree), depth(bTree));
+	printf("Create btree by pre order\n");
+	BiTree preTree = NULL;
+	preTree = precreate_btree(show_item_infos, NULL, "root");
+	printf("pre: ");
+	pre_order(preTree, print_item);
+	putchar('\n');
 
-	destroy(bTree);
+	printf("count=%d depth=%d\n", tree_leavess(bTree), tree_depth(bTree));
+
+	tree_destroy(bTree);
 
 	return 0;
 }

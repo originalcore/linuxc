@@ -10,7 +10,11 @@ LIBS    :=
 LDFLAGS :=
 DEFINES :=
 INCLUDE :=
-CFLAGS  := -g -Wall -O3 $(DEFINES) $(INCLUDE)
+# Must have a no-stack-protection flag here
+# Stack Smashing here is actually caused
+# due to a protection mechanism used by gcc
+# to detect buffer overflow errors
+CFLAGS  := -g -Wall -O3 $(DEFINES) $(INCLUDE) -fno-stack-protector
 CXXFLAGS:= $(CFLAGS)
 
 .PHONY : everything objs clean distclean rebuild
