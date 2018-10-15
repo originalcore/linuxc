@@ -13,77 +13,77 @@
  * 情况用同样的代码,添加这个哨岗
  * 就能将这些特殊情况转化为一般情况
  */
-struct lnx_queue_node sentinel;
-struct lnx_queue_node sentinel = {0, &sentinel, &sentinel};
+QueueNode sentinel;
+QueueNode sentinel = {0, &sentinel, &sentinel};
 
-static struct lnx_queue_node *head = &sentinel;
+static QueueNode *head = &sentinel;
 
-static struct lnx_queue_node* make_lnx_queue_node(struct node *np)
+static QueueNode* make_lnx_queue_node(TreeNode *pTNode)
 {
-	struct lnx_queue_node *p = NULL;
+	QueueNode *pQNode = NULL;
 
-	p = malloc(sizeof(struct lnx_queue_node));
-	p->np = np;
-	p->prev = NULL;
-	p->next = NULL;
+	pQNode = malloc(sizeof(QueueNode));
+	pQNode->tree_node = pTNode;
+	pQNode->prev = NULL;
+	pQNode->next = NULL;
 
-	return p;
+	return pQNode;
 }
 
-void free_lnx_queue_node(struct lnx_queue_node *p)
+void free_lnx_queue_node(QueueNode *pQNode)
 {
-	free(p);
+	free(pQNode);
 }
 
-static void lnx_queue_insert(struct lnx_queue_node* p)
+static void lnx_queue_insert(QueueNode *pQNode)
 {
-	p->next = head->next;
-	head->next->prev = p;
+	pQNode->next = head->next;
+	head->next->prev = pQNode;
 
 	/*
 	 * head的next指向新插入的lnx_queue_node
 	 * 这是个前插操作
 	 * head->Pn->Pn-1...->P2->P1
 	 */
-	head->next = p;
-	p->prev = head;
+	head->next = pQNode;
+	pQNode->prev = head;
 }
 
-static void delete(struct lnx_queue_node* p)
+static void delete(QueueNode* pQNode)
 {
-	p->prev->next = p->next;
-	p->next->prev = p->prev;
+	pQNode->prev->next = pQNode->next;
+	pQNode->next->prev = pQNode->prev;
 }
 
-void lnx_queue_enqueue(struct node *pn)
+void lnx_queue_enqueue(TreeNode *pTNode)
 {
-	struct lnx_queue_node *p;
+	QueueNode *pQNode;
 
-	p = make_lnx_queue_node(pn);
-	lnx_queue_insert(p);
+	pQNode = make_lnx_queue_node(pTNode);
+	lnx_queue_insert(pQNode);
 }
 
 /* 尾部出列 */
-struct lnx_queue_node* lnx_queue_dequeue(void)
+QueueNode* lnx_queue_dequeue(void)
 {
 	/* 空链表 */
 	if (head->prev == head)
 		return NULL;
 	else
 	{
-		struct lnx_queue_node *p = head->prev;
-		delete(p);
-		return p;
+		QueueNode *pQNode = head->prev;
+		delete(pQNode);
+		return pQNode;
 	}
 }
 
 /* 从head的next开始遍历 */
-void lnx_queue_traverse(void (*visit) (struct lnx_queue_node*))
+void lnx_queue_traverse(void (*visit) (QueueNode*))
 {
-	struct lnx_queue_node *p;
+	QueueNode *pQNode;
 
-	for (p = head->next; p != head; p = p->next)
-		visit(p);
+	for (pQNode = head->next; pQNode != head; pQNode = pQNode->next)
+		visit(pQNode);
 }
 
 int lnx_queue_is_empty(void)

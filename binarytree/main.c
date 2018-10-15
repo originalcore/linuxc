@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "binarytree.h"
 
-void print_item(struct node *p)
+void print_item(TreeNode *pTNode)
 {
-	printf("%d", p->item);
+	printf("%d", pTNode->item);
 }
 
 int main(int argc, char **argv)
@@ -19,39 +19,39 @@ int main(int argc, char **argv)
 	 *     1   3  5  7
 	 */
 
-	struct node * root = init(pre_seq, in_seq, 7);
+	BiTree bTree = init(pre_seq, in_seq, 7);
 
 	printf("pre: ");
-	pre_order(root, print_item);
+	pre_order(bTree, print_item);
 	putchar('\n');
 
 	printf("pre_non: ");
-	pre_order_nonrecursion(root);
+	pre_order_nonrecursion(bTree);
 	putchar('\n');
 
 	printf("in: ");
-	in_order(root, print_item);
+	in_order(bTree, print_item);
 	putchar('\n');
 
 	printf("in_non: ");
-	in_order_nonrecursion(root);
+	in_order_nonrecursion(bTree);
 	putchar('\n');
 
 	printf("post: ");
-	post_order(root, print_item);
+	post_order(bTree, print_item);
 	putchar('\n');
 
 	printf("post_non: ");
-	post_order_nonrecursion(root);
+	post_order_nonrecursion(bTree);
 	putchar('\n');
 
 	printf("level: ");
-	level_order(root);
+	level_order(bTree);
 	putchar('\n');
 
-	printf("count=%d depth=%d\n", count(root), depth(root));
+	printf("count=%d depth=%d\n", count(bTree), depth(bTree));
 
-	destroy(root);
+	destroy(bTree);
 
 	return 0;
 }

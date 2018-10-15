@@ -4,38 +4,39 @@
 #include "lnx_queue.h"
 #include "lnx_stack.h"
 
-static struct node* make_node(unsigned char item)
+static TreeNode* make_node(unsigned char item)
 {
-	struct node *p = NULL;
+	TreeNode *pTNode = NULL;
 
-	p = malloc(sizeof(struct node));
-	p->item = item;
-	p->left = NULL;
-	p->right = NULL;
+	pTNode = malloc(sizeof(TreeNode));
+	pTNode->item = item;
+	pTNode->left = NULL;
+	pTNode->right = NULL;
 
-	return p;
+	return pTNode;
 }
 
-static void free_node(struct node *p)
+static void free_node(TreeNode *pTNode)
 {
-	free(p);
+	free(pTNode);
 }
 
-struct node* init(unsigned char VLR[], unsigned char LVR[], int n)
+/* 返回一棵树 */
+BiTree init(unsigned char VLR[], unsigned char LVR[], int n)
 {
-	struct node *t;
 	int k;
+	TreeNode *pTNode;
 
 	if (n <= 0)
 		return NULL;
 
 	for (k = 0; VLR[0] != LVR[k]; k++);
 
-	t = make_node(VLR[0]);
-	t->left = init(VLR + 1, LVR, k);
-	t->right = init(VLR + 1 + k, LVR + 1 + k, n - k - 1);
+	pTNode = make_node(VLR[0]);
+	pTNode->left = init(VLR + 1, LVR, k);
+	pTNode->right = init(VLR + 1 + k, LVR + 1 + k, n - k - 1);
 
-	return t;
+	return pTNode;
 }
 
 /*
@@ -44,14 +45,14 @@ struct node* init(unsigned char VLR[], unsigned char LVR[], int n)
  * 再遍历所有左子节点
  * 再遍历所有右子节点
  */
-void pre_order(struct node *t, void(*visit)(struct node *))
+void pre_order(TreeNode *pTNode, void(*visit)(TreeNode *))
 {
-	if (!t)
+	if (!pTNode)
 		return;
 
-	visit(t);
-	pre_order(t->left, visit);
-	pre_order(t->right, visit);
+	visit(pTNode);
+	pre_order(pTNode->left, visit);
+	pre_order(pTNode->right, visit);
 }
 
 /*
@@ -60,14 +61,14 @@ void pre_order(struct node *t, void(*visit)(struct node *))
  * 再访问根
  * 再遍历所有右子节点
  */
-void in_order(struct node *t, void(*visit)(struct node *))
+void in_order(TreeNode *pTNode, void(*visit)(TreeNode *))
 {
-	if (!t)
+	if (!pTNode)
 		return;
 
-	in_order(t->left, visit);
-	visit(t);
-	in_order(t->right, visit);
+	in_order(pTNode->left, visit);
+	visit(pTNode);
+	in_order(pTNode->right, visit);
 }
 
 /*
@@ -76,26 +77,25 @@ void in_order(struct node *t, void(*visit)(struct node *))
  * 再遍历所有右子节点
  * 再访问根
  */
-void post_order(struct node *t, void(*visit)(struct node *))
+void post_order(TreeNode *pTNode, void(*visit)(TreeNode *))
 {
-	if (!t)
+	if (!pTNode)
 		return;
 
-	post_order(t->left, visit);
-	post_order(t->right, visit);
-	visit(t);
+	post_order(pTNode->left, visit);
+	post_order(pTNode->right, visit);
+	visit(pTNode);
 }
 
-int count(struct node *t)
+int count(TreeNode *pTNode)
 {
-	if (!t)
+	if (!pTNode)
 		return 0;
 
-	return 1 + count(t->left) + count(t->right);
-
+	return 1 + count(pTNode->left) + count(pTNode->right);
 }
 
-int depth(struct node *t)
+int depth(TreeNode *pTNode)
 {
 	/*
 	 * dl:depth of left child
@@ -103,25 +103,25 @@ int depth(struct node *t)
 	 */
 	int dl, dr;
 
-	if (!t)
+	if (!pTNode)
 		return 0;
 
-	dl = depth(t->left);
-	dr = depth(t->right);
+	dl = depth(pTNode->left);
+	dr = depth(pTNode->right);
 
 	/* 深度去左右子树大的 */
 	return 1 + (dl > dr ? dl : dr);
 }
 
-void destroy(struct node *t)
+void destroy(BiTree bTree)
 {
-	post_order(t, free_node);
+	post_order(bTree, free_node);
 }
 
 /* 传入参数是二叉树根 */
-void level_order(struct node *root)
+void level_order(BiTree bTree)
 {
-	if (root == NULL)
+	if (bTree == NULL)
 		return;
 
 	/* 出列的节点 */
@@ -134,15 +134,15 @@ void level_order(struct node *root)
 	 * 	  右子树的根结点(非空)分别入队列
 	 * 4. 重复2,3,直至队列中没有元素
 	 */
-	lnx_queue_enqueue(root);
+	lnx_queue_enqueue(bTree);
 	while (!lnx_queue_is_empty())
 	{
 		popup_node = lnx_queue_dequeue();
-		printf("%d\t", popup_node->np->item);
-		if (popup_node->np->left)
-			lnx_queue_enqueue(popup_node->np->left);
-		if (popup_node->np->right)
-			lnx_queue_enqueue(popup_node->np->right);
+		printf("%d\t", popup_node->tree_node->item);
+		if (popup_node->tree_node->left)
+			lnx_queue_enqueue(popup_node->tree_node->left);
+		if (popup_node->tree_node->right)
+			lnx_queue_enqueue(popup_node->tree_node->right);
 	}
 
 	/* free queue */
@@ -159,21 +159,23 @@ void level_order(struct node *root)
  * 2. 以后再访问该节点右孩子的数据(将其压入栈)
  * 3. 因而可以不记录该节点(左节点)而直接记录该节点的右孩子
  */
-void pre_order_nonrecursion(struct node *root)
+void pre_order_nonrecursion(BiTree bTree)
 {
+	TreeNode *pTNode = bTree;
+
 	while (1)
 	{
-		while (root)
+		while (pTNode)
 		{
 			/* 访问节点数据 */
-			printf("%d", root->item);
+			printf("%d", pTNode->item);
 
 			/* 将右节点压入栈 */
-			if (root->right)
-				lnx_stack_push(root->right);
+			if (pTNode->right)
+				lnx_stack_push(pTNode->right);
 
 			/* 继续遍历左节点 */
-			root = root->left;
+			pTNode = pTNode->left;
 		}
 
 		/* 栈里所有数据访问结束 */
@@ -181,45 +183,49 @@ void pre_order_nonrecursion(struct node *root)
 			break;
 
 		/* 开始访问右节点 */
-		root = lnx_stack_pop();
+		pTNode = lnx_stack_pop();
 	}
 }
 
-void in_order_nonrecursion(struct node *root)
+void in_order_nonrecursion(BiTree bTree)
 {
+	TreeNode *pTNode = bTree;
+
 	while (1)
 	{
 		/* 线路记录 : 将沿路访问过的节点压入栈 */
-		for (; root != NULL; root = root->left)
-			lnx_stack_push(root);
+		for (; pTNode != NULL; pTNode = pTNode->left)
+			lnx_stack_push(pTNode);
 
 		/* 所有节点都处理完 */
 		if (lnx_stack_is_empty())
 			break;
 
 		/* 开始访问节点数据 */
-		root = lnx_stack_pop();
-		printf("%d", root->item);
+		pTNode = lnx_stack_pop();
+		printf("%d", pTNode->item);
 
 		/* 访问右节点 */
-		root = root->right;
+		pTNode = pTNode->right;
 	}
 }
 
-void post_order_nonrecursion(struct node *root)
+void post_order_nonrecursion(BiTree bTree)
 {
-	while (root != NULL || !lnx_stack_is_empty())
+	TreeNode *pTNode = bTree;
+
+	while (pTNode != NULL || !lnx_stack_is_empty())
 	{
 		/* 线路记录 : 将沿路访问过的节点压入栈 */
-		for (; root != NULL; root = root->left)
-			lnx_stack_push(root);
+		for (; pTNode != NULL; pTNode = pTNode->left)
+			lnx_stack_push(pTNode);
 
-		root = lnx_stack_pop();
-		printf("%d", root->item);
+		pTNode = lnx_stack_pop();
+		printf("%d", pTNode->item);
 
-		if (!lnx_stack_is_empty() && root == lnx_stack_peek()->left)
-			root = lnx_stack_peek()->right;
+		if (!lnx_stack_is_empty() && pTNode == lnx_stack_peek()->left)
+			pTNode = lnx_stack_peek()->right;
 		else
-			root = NULL;
+			pTNode = NULL;
 	}
 }

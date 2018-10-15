@@ -1,15 +1,15 @@
 #ifndef BINARYTREE_H
 #define BINARYTREE_H
 #include "node.h"
-struct node* init(unsigned char VLR[], unsigned char LVR[], int n);
-void pre_order(struct node *t, void (*visit)(struct node *));
-void in_order(struct node *t, void (*visit)(struct node *));
-void post_order(struct node *t, void (*visit)(struct node *));
-int count(struct node *t);
-int depth(struct node *t);
-void destroy(struct node *t);
-void level_order(struct node *root);
-void pre_order_nonrecursion(struct node *root);
-void in_order_nonrecursion(struct node *root);
-void post_order_nonrecursion(struct node *root);
+BiTree init(unsigned char VLR[], unsigned char LVR[], int n);
+void pre_order(TreeNode *pTNode, void(*visit)(TreeNode *));
+void in_order(TreeNode *pTNode, void(*visit)(TreeNode *));
+void post_order(TreeNode *pTNode, void(*visit)(TreeNode *));
+int count(TreeNode *pTNode);
+int depth(TreeNode *pTNode);
+void destroy(BiTree bTree);
+void level_order(BiTree bTree);
+void pre_order_nonrecursion(TreeNode *pTNode);
+void in_order_nonrecursion(TreeNode *pTNode);
+void post_order_nonrecursion(TreeNode *pTNode);
 #endif
