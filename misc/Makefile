@@ -10,7 +10,7 @@ PROGS =	byteio cmd_action containerof cpmem daemon envi \
 	bigend socketp stack stdouterr structnop swapno \
 	threadsync ttyname tdas idx2str pc spa epl inotify_example \
 	dnotify_test percent_star_d toggle_value mmap_test1 mmap_test2 \
-	mmap_test3w mmap_test3r fsk_demo
+	mmap_test3w mmap_test3r fsk_demo incomptest
 
 all:	$(PROGS)
 
@@ -160,6 +160,10 @@ getpwd :	get_exe_path.o
 
 inotify_example :	inotify_example.o
 		$(CC) $(CFLAGS) -o $@ $^
+
+# gcov test demo
+incomptest : incomptest.c
+		$(CC) $(CFLAGS) -o $@ $^ -ftest-coverage -fprofile-arcs
 
 clean:
 	rm -f $(PROGS) *.o a.out iotestfile log.txt recfile
