@@ -1,33 +1,24 @@
-# source file and object file share the same name
-SOURCE  := $(wildcard *.c) $(wildcard *.cpp)
-OBJS    := $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCE)))
+CC=gcc
+COMPILE.c=$(CC) $(CFLAGS) $(CPPFLAGS) -c
+LINK.c=$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
+CFLAGS= -Wall
 
-TARGET  := binaryTree
+PROGS = traversal_demo bst_demo \
+		precreate_demo forktree_demo
 
-# compile arguments
-CC      := gcc
-LIBS    :=
-LDFLAGS :=
-DEFINES :=
-INCLUDE :=
-CFLAGS  := -g -Wall -O3 $(DEFINES) $(INCLUDE)
-CXXFLAGS:= $(CFLAGS)
+all:	$(PROGS)
 
-.PHONY : everything objs clean distclean rebuild
+traversal_demo : traversal_demo.o lnx_queue.o lnx_stack.o binarytree.o node.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-everything : $(TARGET)
+bst_demo : bst_demo.o lnx_queue.o lnx_stack.o binarytree.o node.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-all : $(TARGET)
+precreate_demo : precreate_demo.o lnx_queue.o lnx_stack.o binarytree.o node.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-objs : $(OBJS)
+forktree_demo : forktree_demo.o lnx_queue.o lnx_stack.o binarytree.o node.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-rebuild: distclean everything
-
-clean :
-	rm -fr *.o
-
-distclean : clean
-	rm -fr $(TARGET)
-
-$(TARGET) : $(OBJS)
-	$(CC) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LIBS)
+clean:
+	rm -f $(PROGS) *.o

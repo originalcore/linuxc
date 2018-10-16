@@ -244,7 +244,7 @@ void show_item_infos(TreeNode *pTNode, const char *msg)
 /* 按提示输入421003006500700 */
 BiTree precreate_btree(void (*prompt)(TreeNode *, const char *child), TreeNode *parent, const char *msg)
 {
-	unsigned int item;
+	DataType item;
 	BiTree bTree = NULL;
 
 	prompt(parent, msg);
@@ -341,4 +341,58 @@ int level_of_leaf(BiTree bTree, TreeNode *pTNode)
 		/* 没有该节点 */
 		return -1;
 	}
+}
+
+BiTree insert_bst(BiTree bTree, DataType data)
+{
+	/* 开始进行插入操作 */
+	TreeNode *pTNode = make_node(data);
+
+	/* 如果此时是空树,将该节点作为根节点 */
+	if (!bTree)
+		bTree = pTNode;
+
+	/*
+	 * 已存在相同节点
+	 * 则不进行插入操作
+	 */
+	if (find_node(bTree, data))
+		return bTree;
+
+	TreeNode *parent;
+	TreeNode *child = bTree; /* 参考节点 */
+	while (child)
+	{
+		parent = child;
+		/*
+		 * 插入数据和参考节点比较
+		 * 插入数据比参考节点数据小,则将参考节点调整为左节点
+		 * 插入数据比参考节点数据大,则将参考节点调整为右节点
+		 */
+		child = (data < child->item) ? child->left : child->right;
+	}
+	/*
+	 * 上面循环结束后将找到插入点位置
+	 *				parent
+	 *			   /	  \
+	 *child==>> left	  right <<==child
+	 */
+	if (data < parent->item)
+		parent->left = pTNode;
+	else
+		parent->right = pTNode;
+
+	return bTree;
+}
+
+/* 创建二叉排序树(binary search tree) */
+BiTree create_bst(int array[], int len)
+{
+	int i;
+	BiTree bTree = NULL;
+
+	for (i = 0; i < len; i++)
+		bTree = insert_bst(bTree, array[i]);
+
+	return bTree;
 }

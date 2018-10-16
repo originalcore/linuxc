@@ -17,4 +17,5 @@ BiTree fork_tree(BiTree bTree);
 TreeNode *find_node(BiTree bTree, unsigned char item);
 void show_item_infos(TreeNode *pTNode, const char *msg);
 int level_of_leaf(BiTree bTree, TreeNode *pTNode);
+BiTree create_bst(int array[], int len);
 #endif
