@@ -2,3 +2,6 @@
 tags
 project.vim
 project.info
+*.gcov
+*.gcda
+*.gcno

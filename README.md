@@ -6,6 +6,8 @@
 
 [GDB 调试](./gdb/README.md)
 
+[排序算法](./sort/README.md)
+
 [形参和实参](./parameters.md)
 
 [Linux Signal](./misc/sig/README.md)
