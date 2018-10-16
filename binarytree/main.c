@@ -70,11 +70,11 @@ int main(int argc, char **argv)
 	printf("TEST4 find node\n");
 	TreeNode *pTNode;
 	pTNode = find_node(bTree, 1);
-	printf("data = %d\n", pTNode->item);
+	printf("data = %d(%d)\n", pTNode->item, level_of_leaf(bTree, pTNode));
 	pTNode = find_node(preTree, 3);
-	printf("data = %d\n", pTNode->item);
-	pTNode = find_node(forkTree, 7);
-	printf("data = %d\n", pTNode->item);
+	printf("data = %d(%d)\n", pTNode->item, level_of_leaf(preTree, pTNode));
+	pTNode = find_node(forkTree, 6);
+	printf("data = %d(%d)\n", pTNode->item, level_of_leaf(forkTree, pTNode));
 
 	tree_destroy(bTree);
 	tree_destroy(preTree);

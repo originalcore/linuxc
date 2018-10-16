@@ -16,4 +16,5 @@ BiTree precreate_btree(void (*prompt)(TreeNode *, const char *child), TreeNode *
 BiTree fork_tree(BiTree bTree);
 TreeNode *find_node(BiTree bTree, unsigned char item);
 void show_item_infos(TreeNode *pTNode, const char *msg);
+int level_of_leaf(BiTree bTree, TreeNode *pTNode);
 #endif

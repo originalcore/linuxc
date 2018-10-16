@@ -306,13 +306,39 @@ TreeNode *find_node(BiTree bTree, unsigned char item)
 			return bTree;
 		else
 		{
-			if (pTNode = find_node(bTree->left, item))
+			if ((pTNode = find_node(bTree->left, item)))
 				return pTNode;
-			if (pTNode = find_node(bTree->right, item))
+			if ((pTNode = find_node(bTree->right, item)))
 				return pTNode;
 
 			/* end of search, no this item */
 			return NULL;
 		}
+	}
+}
+
+int level_of_leaf(BiTree bTree, TreeNode *pTNode)
+{
+	int level;
+
+	/* 空树层号为0 */
+	if (bTree == NULL)
+		return 0;
+	/* 根节点层号为1 */
+	if (bTree->item == pTNode->item)
+		return 1;
+	else
+	{
+		/* 在左子树寻找 */
+		level = level_of_leaf(bTree->left, pTNode);
+		if (level >= 1)
+			return level + 1;
+		/* 在右子树寻找 */
+		level = level_of_leaf(bTree->right, pTNode);
+		if (level >= 1)
+			return level + 1;
+
+		/* 没有该节点 */
+		return -1;
 	}
 }
