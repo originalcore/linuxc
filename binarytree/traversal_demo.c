@@ -46,6 +46,19 @@ int main(int argc, char **argv)
 	putchar('\n');
 	printf("Tree count = %d depth = %d\n", tree_leavess(bTree), tree_depth(bTree));
 
+	printf("find node 1, 3, 7, 9\n");
+	DataType find_this[] = {1, 3, 7, 9};
+	TreeNode *pTNode;
+	int i;
+	for (i = 0; i < sizeof(find_this) / sizeof(find_this[0]); i++)
+	{
+		pTNode = find_node(bTree, find_this[i]);
+		if (pTNode)
+			printf("Node %d found\n", pTNode->item);
+		else
+			printf("Node %d ain't exist\n", find_this[i]);
+	}
+
 	tree_destroy(bTree);
 
 	return 0;

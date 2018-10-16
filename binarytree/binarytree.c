@@ -293,11 +293,10 @@ BiTree fork_tree(BiTree bTree)
  * 成功返回相应节点指针
  * 失败返回NULL
  */
-TreeNode *find_node(BiTree bTree, unsigned char item)
+TreeNode *find_node(BiTree bTree, DataType item)
 {
 	TreeNode *pTNode;
 
-	/* TreeNode is NULL */
 	if (!bTree)
 		return NULL;
 	else
@@ -306,12 +305,15 @@ TreeNode *find_node(BiTree bTree, unsigned char item)
 			return bTree;
 		else
 		{
+			/* 沿着左子树查找 */
 			if ((pTNode = find_node(bTree->left, item)))
 				return pTNode;
+
+			/* 沿着右子树查找 */
 			if ((pTNode = find_node(bTree->right, item)))
 				return pTNode;
 
-			/* end of search, no this item */
+			/* 未查找到该节点 */
 			return NULL;
 		}
 	}
@@ -395,4 +397,66 @@ BiTree create_bst(int array[], int len)
 		bTree = insert_bst(bTree, array[i]);
 
 	return bTree;
+}
+
+/* BST从根节点一直往左走,直到无路可走就可得到最小值 */
+TreeNode *bst_find_min(BiTree bTree)
+{
+	/* 空树 */
+	if (!bTree)
+		return NULL;
+
+	/* 左子树是空 */
+	if (!bTree->left)
+		return bTree;
+
+	/* 沿着左子树查找 */
+	return bst_find_min(bTree->left);
+}
+
+/* BST从根节点一直往右走,直到无路可走就可以得到最大值 */
+TreeNode *bst_find_max(BiTree bTree)
+{
+	/* 空树 */
+	if (!bTree)
+		return NULL;
+
+	/* 右子树是空 */
+	if (!bTree->right)
+		return bTree;
+
+	/* 沿着右子树查找 */
+	return bst_find_max(bTree->right);
+}
+
+/* BST查找某节点 */
+TreeNode *bst_find_node(BiTree bTree, DataType data)
+{
+	/* 空树或已经遍历了所有节点未找到 */
+	if (!bTree)
+		return NULL;
+
+	if (data < bTree->item)
+		return bst_find_node(bTree->left, data);
+	else if (data > bTree->item)
+		return bst_find_node(bTree->right, data);
+	else
+		return bTree;
+}
+
+/* BST查找某节点非递归版本 */
+TreeNode *bst_find_node_nonrecursion(BiTree bTree, DataType data)
+{
+	TreeNode *pTNode = bTree;
+	while (pTNode)
+	{
+		if (data == pTNode->item)
+			return pTNode;
+
+		/* 要找的数比节点小则遍历左子树,大则遍历右子树 */
+		pTNode = (data < pTNode->item) ? pTNode->left : pTNode->right;
+	}
+
+	/* 空树或已经遍历了所有节点未找到 */
+	return NULL;
 }
