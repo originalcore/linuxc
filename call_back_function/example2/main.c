@@ -1,44 +1,48 @@
 #include <stdio.h>
 #include "generics.h"
 
-typedef struct {
+typedef struct StudentInfo {
 	const char *name;
 	int score;
-}student_t;
+}StudentInfo_T, *StudentInfo_P;
 
 /*
  * a is big than b
  */
 int cmp_student(void *a, void *b)
 {
-	return ((student_t *)a)->score - ((student_t *)b)->score;
+	return ((StudentInfo_T *)a)->score - ((StudentInfo_T *)b)->score;
 }
 
 int main(int argc, char *argv[])
 {
 	int i;
-	student_t *pmax = NULL;
+	StudentInfo_P pMaxScore = NULL;
 
-	student_t list[4] = {
+	StudentInfo_T info_list[4] = {
 		{"Tom", 8},
 		{"Jerry", 72},
 		{"Moby", 90},
 		{"Kirby", 89}
 	};
 
-	student_t *plist[4] = {
-		&list[0],
-		&list[1],
-		&list[2],
-		&list[3]
+	/*
+	 * 指针数组
+	 * 结构体指针数组
+	 */
+	StudentInfo_P pInfos[4] = {
+		&info_list[0],
+		&info_list[1],
+		&info_list[2],
+		&info_list[3]
 	};
 
-
+	printf("Student's Scores Info:\n");
 	for (i = 0; i < 4; i++)
-		printf("name %s : score %d\n", list[i].name, list[i].score);
+		printf("name %5s : score %5d\n", info_list[i].name, info_list[i].score);
 
-	pmax = max((void **)plist, 4, cmp_student);
-	printf("pmax score is %d\n", pmax->score);
+	pMaxScore = get_max_score((void **)pInfos, 4, cmp_student);
+	printf("Top score is %s:%d\n", pMaxScore->name, pMaxScore->score);
 
 	return 0;
 }
