@@ -140,7 +140,7 @@ void level_order(BiTree bTree)
 	while (!lnx_queue_is_empty())
 	{
 		popup_node = lnx_queue_dequeue();
-		printf("%d\t", popup_node->tree_node->item);
+		printf("%d ", popup_node->tree_node->item);
 		if (popup_node->tree_node->left)
 			lnx_queue_enqueue(popup_node->tree_node->left);
 		if (popup_node->tree_node->right)
@@ -459,4 +459,68 @@ TreeNode *bst_find_node_nonrecursion(BiTree bTree, DataType data)
 
 	/* 空树或已经遍历了所有节点未找到 */
 	return NULL;
+}
+
+/* 二叉搜索树删除节点 */
+BiTree bst_delete_node(BiTree *pbTree, DataType data)
+{
+	BiTree pTemp = *pbTree;
+	TreeNode *parent;
+	TreeNode *smallest;
+
+	/* 空树或已经遍历了所有节点未找到 */
+	if (!pTemp)
+		return NULL;
+
+	/* 找到要删除的节点 */
+	if (pTemp->item == data)
+	{
+		/*
+		 * 如果是叶子节点(无左右子树)
+		 * 直接删除
+		 */
+		if (!pTemp->left && !pTemp->right)
+			*pbTree = NULL;
+		/* 只有一个左节点 */
+		else if (!pTemp->right && pTemp->left)
+			*pbTree = pTemp->left;
+		/* 只有一个右节点 */
+		else if (!pTemp->left && pTemp->right)
+			*pbTree = pTemp->right;
+		/* 左右节都不为空,以右子树最小节点取代该节点 */
+		else
+		{
+			/* smallest为要删除的节点pTemp的右节点 */
+			smallest = pTemp->right;
+			/* smallest无左节点 */
+			if (!smallest->left)
+				smallest->left = smallest->right;
+			/* smallest左右节点都有 */
+			else
+			{
+				while (smallest->left)
+				{
+					parent = smallest;
+					smallest = smallest->left;
+				}
+				/*
+				 * 循环结束后smallest指向最小节点
+				 * parent为smallest父节点
+				 */
+				parent->left = smallest->right;
+				smallest->left = pTemp->left;
+				smallest->right = pTemp->right;
+			}
+			*pbTree = smallest;
+		}
+		free_node(pTemp);
+	}
+	else if (data > pTemp->item)
+		bst_delete_node(&(pTemp->right), data);
+	else if (data < pTemp->item)
+		bst_delete_node(&(pTemp->left), data);
+	else
+		printf("Oops...\n");
+
+	return *pbTree;
 }

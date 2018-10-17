@@ -3,5 +3,5 @@
 
 void print_item(TreeNode *pTNode)
 {
-	printf("%d", pTNode->item);
+	printf("%d ", pTNode->item);
 }

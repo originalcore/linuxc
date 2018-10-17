@@ -4,7 +4,8 @@ LINK.c=$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
 CFLAGS= -Wall
 
 PROGS = traversal_demo bst_demo \
-		precreate_demo forktree_demo
+		precreate_demo forktree_demo \
+		bst_delete
 
 all:	$(PROGS)
 
@@ -12,6 +13,9 @@ traversal_demo : traversal_demo.o lnx_queue.o lnx_stack.o binarytree.o node.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 bst_demo : bst_demo.o lnx_queue.o lnx_stack.o binarytree.o node.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+bst_delete : bst_delete.o lnx_queue.o lnx_stack.o binarytree.o node.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 precreate_demo : precreate_demo.o lnx_queue.o lnx_stack.o binarytree.o node.o

@@ -44,7 +44,6 @@ int main(int argc, char **argv)
 			printf("Node %d ain't exist\n", find_this[i]);
 	}
 
-
 	tree_destroy(bstTree);
 
 	return 0;

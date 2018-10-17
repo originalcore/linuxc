@@ -22,4 +22,5 @@ TreeNode *bst_find_min(BiTree bTree);
 TreeNode *bst_find_max(BiTree bTree);
 TreeNode *bst_find_node(BiTree bTree, DataType data);
 TreeNode *bst_find_node_nonrecursion(BiTree bTree, DataType data);
+BiTree bst_delete_node(BiTree *pbTree, DataType data);
 #endif
