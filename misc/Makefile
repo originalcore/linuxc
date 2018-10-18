@@ -10,9 +10,12 @@ PROGS =	byteio cmd_action containerof cpmem daemon envi \
 	bigend socketp stack stdouterr structnop swapno \
 	threadsync ttyname tdas idx2str pc spa epl inotify_example \
 	dnotify_test percent_star_d toggle_value mmap_test1 mmap_test2 \
-	mmap_test3w mmap_test3r fsk_demo incomptest
+	mmap_test3w mmap_test3r fsk_demo incomptest selfident
 
 all:	$(PROGS)
+
+selfident: selfident.o
+		$(CC) $(CFLAGS) -o $@ $^
 
 fsk_demo: fseek_example.o
 		$(CC) $(CFLAGS) -o $@ $^
