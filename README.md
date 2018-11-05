@@ -4,6 +4,8 @@
 
 [SocketPair](./misc/SP.md)
 
+[EXEC函数族](./exec/README.md)
+
 [GDB 调试](./gdb/README.md)
 
 [二叉树](./binarytree/README.md)

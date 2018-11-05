@@ -1,0 +1,9 @@
+execlp
+upper
+wrapper
+execv_ep
+execl_ep
+execle_ep
+execve_ep
+execlp_ep
+execvp_ep
