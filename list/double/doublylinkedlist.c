@@ -1,95 +1,191 @@
 #include <stdlib.h>
-#include <assert.h>
 #include "doublylinkedlist.h"
+#include <stdio.h>
+#include <assert.h>
 
-struct node tailsentinel;
-struct node headsentinel = {0, NULL, &tailsentinel};
-struct node tailsentinel = {0, &headsentinel, NULL};
+/*
+ * sentinel node is not a valid node
+ * data = 0 means invalid
+ */
+list_node_t tailsentinel;
+list_node_t headsentinel = {
+	.data = 0,
+	.prev = NULL,
+	.next = &tailsentinel
+};
 
-static struct node *head = &headsentinel;
-static struct node *tail = &tailsentinel;
+list_node_t tailsentinel = {
+	.data = 0,
+	.prev = &headsentinel,
+	.next = NULL
+};
 
-struct node* make_node(unsigned char item)
+double_list_pt create_list(void)
 {
-	struct node *p = NULL;
-	
-	p = malloc(sizeof(struct node));		
-	p->item = item;
-	p->prev = NULL;
-	p->next = NULL;
+	double_list_pt list;
 
-	return p;
+	list = malloc(sizeof(double_list_t));
+	if (NULL == list)
+		return NULL;
+
+	/* init list head, tail and len */
+	list->head = &headsentinel;
+	list->tail = &tailsentinel;
+	list->len = 0;
+
+	return list;
 }
 
-void free_node(struct node *p)
+static list_node_pt make_node(data_type data)
 {
-	free(p);
+	list_node_pt pnode = NULL;
+
+	pnode = malloc(sizeof(list_node_t));
+	if (NULL == pnode)
+		return NULL;
+
+	pnode->data = data;
+	pnode->prev = NULL;
+	pnode->next = NULL;
+
+	return pnode;
 }
 
-struct node* search(unsigned char key)
+/* insert node in the front of the list */
+void insert_node_front(double_list_pt list, data_type data)
 {
-	struct node* p = NULL;
+	list_node_pt head = list->head;
+	list_node_pt pnode = make_node(data);
 
-	for (p = head->next; p != tail; p = p->next)
-		if (p->item == key)
-			return p;
+	pnode->next = head->next;
+	head->next->prev = pnode;
+	head->next = pnode;
+	pnode->prev = head;
+
+	list->len++;
+}
+
+/*
+ * @visit is a function pointer
+ * return void *
+ * takes three arguments: double_list_pt, list_node_pt, void *
+ *
+ * return value of visit varies from the real implement
+ */
+static void *traverse(double_list_pt list,
+		void *(*visit) (double_list_pt, list_node_pt, void *), void *ptr)
+{
+	/* the first valid node */
+	list_node_pt pnode = list->head->next;
+	void *ret;
+
+	while (pnode != list->tail)
+	{
+		/*
+		 * there's no necessary to iterator list anymore
+		 * while some visit function calls return not NULL
+		 * so just break the loop
+		 */
+		ret = visit(list, pnode, ptr);
+		if (ret != NULL)
+			break;
+		pnode = pnode->next;
+	}
+
+	return ret;
+}
+
+/*
+ * dont't care about the return value
+ * so return NULL means success
+ */
+static void *print_data(double_list_pt list, list_node_pt pnode, void *ptr)
+{
+	printf("%d ", pnode->data);
+	return NULL;
+}
+
+/*
+ * free node memeory space and decrement list len
+ *
+ * dont't care about the return value
+ * so return NULL means success
+ */
+static void *free_node(double_list_pt list, list_node_pt pnode, void *ptr)
+{
+	free(pnode);
+	pnode = NULL;
+	list->len--;
 
 	return NULL;
 }
 
-void insert(struct node* p)
+/*
+ * In link list compare the pnode value with key
+ *
+ * return NULL means failed to search
+ * return node when success
+ */
+static void *compare_node(double_list_pt list, list_node_pt pnode, void *key)
 {
-	p->next = head->next;
-	head->next->prev = p;
-	head->next = p;
-	p->prev = head;
+	/* yes, return the match node */
+	if (pnode->data == *(data_type *)key)
+		return (void *)pnode;
+
+	/* no this node found */
+	return NULL;
 }
 
-void delete(struct node* p)
+void destory_list(double_list_pt list)
 {
-	p->prev->next = p->next;
-	p->next->prev = p->prev;
+	/* free valid node memory */
+	traverse(list, free_node, NULL);
+
+	/* free list */
+	list->head = NULL;
+	list->tail = NULL;
+	list->len = 0;
+	free(list);
+	list = NULL;
 }
 
-void traverse(void (*visit) (struct node*))
+int show_datas(double_list_pt list)
 {
-	struct node *p;
-
-	for (p = head->next; p != tail; p = p->next)
-		visit(p);
-}
-
-void destroy(void)
-{
-	struct node *p = head->next;
-	struct node *q;	
-
-	head->next = tail;
-	tail->prev = head;
-
-	while (p != tail)
+	if (0 == list->len)
 	{
-		q = p;
-		p = p->next;
-		free_node(q);
+		printf("Empty Link list\n");
+		return 1;
 	}
+	traverse(list, print_data, NULL);
+	printf("\n");
+	return 0;
 }
 
-void enqueue(struct node *p)
+/* match the node with compare_node function */
+list_node_pt search_node(double_list_pt list, data_type key)
 {
-	insert(p);
+	return (list_node_pt)traverse(list, compare_node, &key);
 }
 
-/* 尾部出列 */
-struct node* dequeue(void)
+/* delete pnode from the list */
+void delete_node(double_list_pt list, list_node_pt pnode)
 {
-	/* 空链表 */
-	if (tail->prev == head)
-		return NULL;
-	else
+	list_node_pt del;
+
+	assert(NULL != pnode);
+	del = search_node(list, pnode->data);
+	if (NULL == del)
 	{
-		struct node *p = tail->prev;
-		delete(p);
-		return p;
+		printf("Node %d not found\n", pnode->data);
+		return;
 	}
+
+	del->prev->next = del->next;
+	del->next->prev = del->prev;
+	free_node(list, del, NULL);
+}
+
+int list_len(double_list_pt list)
+{
+	return list->len;
 }

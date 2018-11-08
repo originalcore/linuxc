@@ -1,21 +1,24 @@
-#ifndef DOUBLYLINKEDLIST_H
-#define DOUBLYLINKEDLIST_H
+#ifndef _DOUBLYLINKEDLIST_H_
+#define _DOUBLYLINKEDLIST_H_
 
-struct node {
-	unsigned char item;
-	struct node *prev;
-	struct node *next;
-};
+typedef unsigned int data_type;
+typedef struct list_node {
+	data_type data;
+	struct list_node *prev;
+	struct list_node *next;
+} list_node_t, *list_node_pt;
 
-struct node* make_node(unsigned char item);
-void free_node(struct node *p);
-struct node* search(unsigned char key);
-void insert(struct node *p);
-void delete(struct node* p);
-void traverse(void (*visit)(struct node*));
-void destroy(void);
-void enqueue(struct node *p);
-struct node* dequeue(void);
+typedef struct double_list {
+	list_node_pt head;
+	list_node_pt tail;
+	int len;
+} double_list_t, *double_list_pt;
 
+double_list_pt create_list(void);
+void insert_node_front(double_list_pt list, data_type data);
+void destory_list(double_list_pt list);
+int show_datas(double_list_pt list);
+list_node_pt search_node(double_list_pt list, data_type key);
+void delete_node(double_list_pt list, list_node_pt p);
+int list_len(double_list_pt list);
 #endif
-
