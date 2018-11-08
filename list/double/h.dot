@@ -1,0 +1,50 @@
+/*
+ * Usage :
+ * dot -Tpng list.dot -o list.png
+ */
+digraph g {
+graph [
+rankdir = "LR"
+];
+node [
+fontsize = "16"
+shape = "ellipse"
+];
+edge [
+];
+
+HEAD [
+label="<T>head |{<p>NULL|<v>0|<n>next}";
+shape = "record"
+];
+
+TAIL [
+label="<T>tail |{<p>prev|<v>0|<n>NULL}";
+shape = "record"
+];
+
+NODE1 [
+label="<T>node_1 |{<p>prev|<v>value|<n>next}";
+shape = "record"
+];
+
+NODE2 [
+label="<T>node_2 |{<p>prev|<v>value|<n>next}";
+shape = "record"
+];
+
+/* pnode->next = head->next */
+NODE1:n->TAIL:T
+
+/* head->next->prev = pnode */
+TAIL:p->NODE1:T
+
+/* pnode->next = head->next */
+NODE2:n->NODE1:T
+
+/* head->next->prev = pnode */
+NODE1:p->NODE2:T
+
+/* head->next = pnode */
+HEAD:n->NODE2:T
+}
