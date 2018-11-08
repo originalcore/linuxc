@@ -21,4 +21,6 @@ int show_datas(double_list_pt list);
 list_node_pt search_node(double_list_pt list, data_type key);
 void delete_node(double_list_pt list, list_node_pt p);
 int list_len(double_list_pt list);
+double_list_pt dup_list(double_list_pt orig_list);
+void insert_node_rear(double_list_pt list, data_type data);
 #endif

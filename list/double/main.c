@@ -6,62 +6,78 @@
 void show_menu(void)
 {
 	printf("====== Double Link List Test ======\n");
-	printf("1 insert node\n");
-	printf("2 show list\n");
-	printf("3 delete node\n");
-	printf("4 destroy list\n");
-	printf("5 list len\n");
-	printf("6 exit\n");
+	printf("[m]enu show\n");
+	printf("[i]nsert node\n");
+	printf("[a]ppend node\n");
+	printf("[s]how list\n");
+	printf("[x]delete node\n");
+	printf("[d]estroy list\n");
+	printf("[l]ist len\n");
+	printf("[q]uit\n");
+	printf("[c]opy list\n");
 	printf("=================================\n");
 }
 
-int select_menu(void)
+char select_menu(void)
 {
-	int cmd;
+	char cmd;
 
-	show_menu();
 	printf("\nEnter Cmd:");
-	scanf("%d%*c", &cmd);
-	assert(cmd > 0);
-	assert(cmd < 9);
+	scanf("%c%*c", &cmd);
 	return cmd;
 }
 
 int main(int argc, char *argv[])
 {
 	double_list_pt list = create_list();
+	double_list_pt copy;
 	data_type data;
 	list_node_pt tmp;
 
+	show_menu();
 	while (1)
 	{
 		switch (select_menu())
 		{
-			case 1:
+			case 'm':
+				show_menu();
+				break;
+			case 'i':
 				printf("Enter data:");
-				scanf("%d", &data);
+				scanf("%d%*c", &data);
 				insert_node_front(list, data);
 				break;
-			case 2:
+			case 'a':
+				printf("Enter data:");
+				scanf("%d%*c", &data);
+				insert_node_rear(list, data);
+				break;
+			case 's':
 				printf("List:");
 				show_datas(list);
 				break;
-			case 3:
+			case 'x':
 				printf("Enter node data:");
-				scanf("%d", &data);
+				scanf("%d%*c", &data);
 				tmp = search_node(list, data);
 				delete_node(list, tmp);
 				break;
-			case 4:
+			case 'd':
 				destory_list(list);
 				break;
-			case 5:
+			case 'l':
 				printf("len = %d\n", list_len(list));
 				break;
-			case 6:
+			case 'q':
 				exit(0);
 				break;
+			case 'c':
+				copy = dup_list(list);
+				printf("copy list:");
+				show_datas(copy);
+				break;
 			default:
+				show_menu();
 				break;
 		};
 	}

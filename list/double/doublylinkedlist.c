@@ -3,34 +3,39 @@
 #include <stdio.h>
 #include <assert.h>
 
-/*
- * sentinel node is not a valid node
- * data = 0 means invalid
- */
-list_node_t tailsentinel;
-list_node_t headsentinel = {
-	.data = 0,
-	.prev = NULL,
-	.next = &tailsentinel
-};
-
-list_node_t tailsentinel = {
-	.data = 0,
-	.prev = &headsentinel,
-	.next = NULL
-};
-
 double_list_pt create_list(void)
 {
 	double_list_pt list;
 
+	/*
+	 * sentinel node is not a valid node
+	 * data = 0 means invalid
+	 */
+	list_node_pt headsentinel;
+	list_node_pt tailsentinel;
+
+	headsentinel = malloc(sizeof(list_node_t));
+	if (NULL == headsentinel)
+		return NULL;
+	tailsentinel = malloc(sizeof(list_node_t));
+	if (NULL == tailsentinel)
+		return NULL;
+
+	headsentinel->data = 0;
+	headsentinel->prev = NULL;
+	headsentinel->next = tailsentinel;
+	tailsentinel->data = 0;
+	tailsentinel->prev = headsentinel;
+	tailsentinel->next = NULL;
+
+	/* the real list */
 	list = malloc(sizeof(double_list_t));
 	if (NULL == list)
 		return NULL;
 
 	/* init list head, tail and len */
-	list->head = &headsentinel;
-	list->tail = &tailsentinel;
+	list->head = headsentinel;
+	list->tail = tailsentinel;
 	list->len = 0;
 
 	return list;
@@ -61,6 +66,20 @@ void insert_node_front(double_list_pt list, data_type data)
 	head->next->prev = pnode;
 	head->next = pnode;
 	pnode->prev = head;
+
+	list->len++;
+}
+
+/* append node in the rear of the list */
+void insert_node_rear(double_list_pt list, data_type data)
+{
+	list_node_pt tail = list->tail;
+	list_node_pt pnode = make_node(data);
+
+	pnode->prev = tail->prev;
+	tail->prev->next = pnode;
+	tail->prev = pnode;
+	pnode->next = tail;
 
 	list->len++;
 }
@@ -141,7 +160,9 @@ void destory_list(double_list_pt list)
 	/* free valid node memory */
 	traverse(list, free_node, NULL);
 
-	/* free list */
+	/* free sentinel and list */
+	free(list->head);
+	free(list->tail);
 	list->head = NULL;
 	list->tail = NULL;
 	list->len = 0;
@@ -188,4 +209,22 @@ void delete_node(double_list_pt list, list_node_pt pnode)
 int list_len(double_list_pt list)
 {
 	return list->len;
+}
+
+/* duplicate a list */
+double_list_pt dup_list(double_list_pt orig_list)
+{
+	/* fetch the first valid node */
+	list_node_pt current = orig_list->head->next;
+	list_node_pt tail = orig_list->tail;
+	double_list_pt copy_list;
+
+	copy_list = create_list();
+	while (current != tail)
+	{
+		insert_node_rear(copy_list, current->data);
+		current = current->next;
+	}
+
+	return copy_list;
 }
