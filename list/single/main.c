@@ -1,56 +1,57 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "linklist.h"
+#include "menu.h"
 
-void print_item(struct node *p)
+int main(int argc, char *argv[])
 {
-	printf("%d ", p->item);
-}
+	single_list_pt list = NULL;
+	data_type data;
+	list_node_pt tmp;
 
-int main(int argc, char **argv)
-{
-	struct node *p;
-	int i;
-	int raw_data[] = {10, 5, 90};
-	int raw_data2[] = {100, 200, 250};
+	list = create_list();
 
-	/* make node and insert to list */
-	for (i = 0; i < sizeof(raw_data) / sizeof(raw_data[0]); i++)
+	show_menu();
+	while (1)
 	{
-		p = make_node(raw_data[i]);
-		printf("Insert %d to list head\n", raw_data[i]);
-		insert(p);
+		switch (select_menu())
+		{
+			case 'm':
+				show_menu();
+				break;
+			case 'i':
+				printf("Enter data:");
+				scanf("%d%*c", &data);
+				insert_node_front(list, data);
+				break;
+			case 's':
+				printf("List:");
+				show_datas(list);
+				break;
+			case 'x':
+				printf("Enter node data:");
+				scanf("%d%*c", &data);
+				tmp = search_node(list, data);
+				if (NULL != tmp)
+					delete_node(list, tmp);
+				else
+					printf("Node %d not found\n", data);
+				break;
+			case 'l':
+				printf("len = %d\n", list_len(list));
+				break;
+			case 'q':
+				exit(0);
+				break;
+			case 'd':
+				destory_list(list);
+				break;
+			default:
+				show_menu();
+				break;
+		};
 	}
-
-	/* print list */
-	printf("List: ");
-	traverse(print_item);
-	printf("\n");
-
-	/* delete one */
-	printf("Delete %d\n", 90);
-	p = search(90);
-	delete(p);
-	free_node(p);
-
-	/* print list */
-	printf("List: ");
-	traverse(print_item);
-	printf("\n");
-	destroy();
-
-	/* make node and insert to list */
-	for (i = 0; i < sizeof(raw_data2) / sizeof(raw_data2[0]); i++)
-	{
-		p = make_node(raw_data2[i]);
-		push(p);
-	}
-
-	while ( (p = pop()) )
-	{
-		print_item(p);
-		free_node(p);
-	}
-	printf("\n");
 
 	return 0;
 }
