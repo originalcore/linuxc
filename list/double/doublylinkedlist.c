@@ -76,6 +76,7 @@ void insert_node_front(double_list_pt list, data_type data)
 {
 	list_node_pt head = list->head;
 	list_node_pt pnode = make_node(data);
+	assert(NULL != pnode);
 
 	pnode->next = head->next;
 	head->next->prev = pnode;
