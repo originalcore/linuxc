@@ -3,6 +3,18 @@
 #include <stdio.h>
 #include <assert.h>
 
+/* matched return 1 else return 0 */
+int match_node(void *ptr, void *key)
+{
+	list_node_pt pnode;
+
+	pnode = (list_node_pt)ptr;
+	if (pnode->data == *(data_type *)key)
+		return 1;
+
+	return 0;
+}
+
 double_list_pt create_list(void)
 {
 	double_list_pt list;
@@ -37,6 +49,9 @@ double_list_pt create_list(void)
 	list->head = headsentinel;
 	list->tail = tailsentinel;
 	list->len = 0;
+
+	/* init the match function */
+	list->match_algorithm = match_node;
 
 	return list;
 }
@@ -92,7 +107,8 @@ void insert_node_rear(double_list_pt list, data_type data)
  * return value of visit varies from the real implement
  */
 static void *traverse(double_list_pt list,
-		void *(*visit) (double_list_pt, list_node_pt, void *), void *ptr)
+		void *(*visit)(double_list_pt, list_node_pt, void *),
+		void *ptr)
 {
 	/* the first valid node */
 	list_node_pt pnode = list->head->next;
@@ -108,6 +124,7 @@ static void *traverse(double_list_pt list,
 		ret = visit(list, pnode, ptr);
 		if (ret != NULL)
 			break;
+
 		pnode = pnode->next;
 	}
 
@@ -121,6 +138,7 @@ static void *traverse(double_list_pt list,
 static void *print_data(double_list_pt list, list_node_pt pnode, void *ptr)
 {
 	printf("%d ", pnode->data);
+
 	return NULL;
 }
 
@@ -147,9 +165,17 @@ static void *free_node(double_list_pt list, list_node_pt pnode, void *ptr)
  */
 static void *compare_node(double_list_pt list, list_node_pt pnode, void *key)
 {
-	/* yes, return the match node */
-	if (pnode->data == *(data_type *)key)
-		return (void *)pnode;
+	if (list->match_algorithm)
+	{
+		if (list->match_algorithm(pnode, key))
+			return (void *)pnode;
+	}
+	else
+	{
+		/* yes, return the match node */
+		if (pnode->data == *(data_type *)key)
+			return (void *)pnode;
+	}
 
 	/* no this node found */
 	return NULL;
@@ -177,8 +203,10 @@ int show_datas(double_list_pt list)
 		printf("Empty Link list\n");
 		return 1;
 	}
+
 	traverse(list, print_data, NULL);
 	printf("\n");
+
 	return 0;
 }
 
@@ -188,21 +216,14 @@ list_node_pt search_node(double_list_pt list, data_type key)
 	return (list_node_pt)traverse(list, compare_node, &key);
 }
 
-/* delete pnode from the list */
-void delete_node(double_list_pt list, list_node_pt pnode)
+/* delete node from the list */
+void delete_node(double_list_pt list, list_node_pt del)
 {
-	list_node_pt del;
-
-	assert(NULL != pnode);
-	del = search_node(list, pnode->data);
-	if (NULL == del)
-	{
-		printf("Node %d not found\n", pnode->data);
-		return;
-	}
+	assert(NULL != del);
 
 	del->prev->next = del->next;
 	del->next->prev = del->prev;
+
 	free_node(list, del, NULL);
 }
 

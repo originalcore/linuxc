@@ -2,6 +2,7 @@
 #define _DOUBLYLINKEDLIST_H_
 
 typedef unsigned int data_type;
+
 typedef struct list_node {
 	data_type data;
 	struct list_node *prev;
@@ -11,6 +12,7 @@ typedef struct list_node {
 typedef struct double_list {
 	list_node_pt head;
 	list_node_pt tail;
+	int (*match_algorithm)(void *ptr, void *key);
 	int len;
 } double_list_t, *double_list_pt;
 
@@ -23,4 +25,5 @@ void delete_node(double_list_pt list, list_node_pt p);
 int list_len(double_list_pt list);
 double_list_pt dup_list(double_list_pt orig_list);
 void insert_node_rear(double_list_pt list, data_type data);
+
 #endif

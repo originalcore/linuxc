@@ -24,6 +24,7 @@ char select_menu(void)
 
 	printf("\nEnter Cmd:");
 	scanf("%c%*c", &cmd);
+
 	return cmd;
 }
 
@@ -60,7 +61,10 @@ int main(int argc, char *argv[])
 				printf("Enter node data:");
 				scanf("%d%*c", &data);
 				tmp = search_node(list, data);
-				delete_node(list, tmp);
+				if (NULL != tmp)
+					delete_node(list, tmp);
+				else
+					printf("Node %d not found\n", data);
 				break;
 			case 'd':
 				destory_list(list);
