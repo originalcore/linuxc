@@ -4,9 +4,16 @@ LINK.c=$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
 CFLAGS= -Wall -DUSE_RW
 
 PROGS =	tcp_server_wrap tcp_client_wrap tcp_server tcp_client \
-	tcp_client_inter tcp_server_inter udp_server udp_client
+	tcp_client_inter tcp_server_inter udp_server udp_client \
+	getinfo_svr getinfo_cli
 
 all: $(PROGS)
+
+getinfo_svr: getaddrinfo_server.o
+		$(CC) -o $@ $^
+
+getinfo_cli: getaddrinfo_client.o
+		$(CC) -o $@ $^
 
 tcp_server:	tcp_server.o
 		$(CC) $(CFLAGS) -o $@ $^

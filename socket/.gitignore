@@ -6,3 +6,5 @@ tcp_client_inter
 tcp_server_inter
 udp_server
 udp_client
+getinfo_cli
+getinfo_svr
