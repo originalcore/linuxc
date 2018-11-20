@@ -9,6 +9,7 @@
  */
 void daemonize(void)
 {
+	int fd;
 	pid_t pid;
 
 	/*
@@ -36,11 +37,17 @@ void daemonize(void)
 
 	/*
 	 * Attach file descriptors 0, 1, 2 to /dev/null
+	 * Every output goes to /dev/null
 	 */
 	close(0);
-	open("/dev/null", O_RDWR);
-	dup2(0, 1);
-	dup2(0, 2);
+	if ((fd = open("/dev/null", O_RDWR)) != -1)
+	{
+        dup2(fd, STDIN_FILENO);
+        dup2(fd, STDOUT_FILENO);
+        dup2(fd, STDERR_FILENO);
+        if (fd > STDERR_FILENO)
+			close(fd);
+	}
 }
 
 int main(int argc, char *argv[])
