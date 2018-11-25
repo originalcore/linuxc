@@ -7,7 +7,6 @@
 
 int main(int argc, char *argv[])
 {
-
 	FILE *fin;
 
 	/*
@@ -23,4 +22,6 @@ int main(int argc, char *argv[])
 
 	/* All was well, close the file */
 	fclose(fin);
+
+	return 0;
 }
